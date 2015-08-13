@@ -1,0 +1,23 @@
+plugin:
+  verbose: false
+algorithm:
+  tps-padding: 175
+  sample-count: 8
+  threshold:
+    ticks-per-second: 17.5
+    memory-percent: 33.0
+    chunk:
+      max-unloads-per-tick: 5
+    cull:
+      adaptive:
+        enable: true
+        mobs-per-chunk: 35
+        mobs-hostile-per-chunk: 0
+        mobs-peaceful-per-chunk: 0
+      active:
+        enable: true
+        mobs-per-chunk: 100
+        mobs-hostile-per-chunk: 0
+        mobs-peaceful-per-chunk: 0
+      other:
+        cull-tamable: false
