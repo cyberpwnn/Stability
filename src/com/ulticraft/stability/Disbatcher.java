@@ -41,21 +41,25 @@ public class Disbatcher implements Listener
 		if(!this.isMonitoringPlayer(player))
 		{
 			this.monitoringPlayers.add(player);
-			ItemStack map = new ItemStack(Material.MAP);
-			map.addUnsafeEnchantment(Enchantment.DURABILITY, 1337);
-			player.getInventory().addItem(map);
-			for(ItemStack i : player.getInventory().getContents())
+			
+			if(pl.getConfiguration().isMapsEnabled())
 			{
-				if(i == null)
+				ItemStack map = new ItemStack(Material.MAP);
+				map.addUnsafeEnchantment(Enchantment.DURABILITY, 1337);
+				player.getInventory().addItem(map);
+				for(ItemStack i : player.getInventory().getContents())
 				{
-					continue;
-				}
-
-				if(i.getType().equals(Material.MAP))
-				{
-					if(i.getEnchantmentLevel(Enchantment.DURABILITY) == 1337)
+					if(i == null)
 					{
-						i.setAmount(1);
+						continue;
+					}
+
+					if(i.getType().equals(Material.MAP))
+					{
+						if(i.getEnchantmentLevel(Enchantment.DURABILITY) == 1337)
+						{
+							i.setAmount(1);
+						}
 					}
 				}
 			}
@@ -67,41 +71,9 @@ public class Disbatcher implements Listener
 		if(this.isMonitoringPlayer(player))
 		{
 			this.monitoringPlayers.remove(player);
-			ItemStack map = new ItemStack(Material.MAP);
-			map.addUnsafeEnchantment(Enchantment.DURABILITY, 1337);
-			if(player.getInventory().contains(map))
-			{
-				player.getInventory().remove(map);
-			}
-
-			for(ItemStack i : player.getInventory().getContents())
-			{
-				if(i == null)
-				{
-					continue;
-				}
-
-				if(i.getType().equals(Material.MAP))
-				{
-					if(i.getEnchantmentLevel(Enchantment.DURABILITY) == 1337)
-					{
-						player.getInventory().remove(i);
-					}
-				}
-			}
-		}
-	}
-
-	public void removeAllMonitors()
-	{
-		Iterator<Player> iterator = monitoringPlayers.iterator();
-		while(iterator.hasNext())
-		{
-			Player player = iterator.next();
 			
-			if(this.isMonitoringPlayer(player))
+			if(pl.getConfiguration().isMapsEnabled())
 			{
-				iterator.remove();
 				ItemStack map = new ItemStack(Material.MAP);
 				map.addUnsafeEnchantment(Enchantment.DURABILITY, 1337);
 				if(player.getInventory().contains(map))
@@ -121,6 +93,46 @@ public class Disbatcher implements Listener
 						if(i.getEnchantmentLevel(Enchantment.DURABILITY) == 1337)
 						{
 							player.getInventory().remove(i);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	public void removeAllMonitors()
+	{
+		Iterator<Player> iterator = monitoringPlayers.iterator();
+		while(iterator.hasNext())
+		{
+			Player player = iterator.next();
+			
+			if(this.isMonitoringPlayer(player))
+			{
+				iterator.remove();
+				
+				if(pl.getConfiguration().isMapsEnabled())
+				{
+					ItemStack map = new ItemStack(Material.MAP);
+					map.addUnsafeEnchantment(Enchantment.DURABILITY, 1337);
+					if(player.getInventory().contains(map))
+					{
+						player.getInventory().remove(map);
+					}
+
+					for(ItemStack i : player.getInventory().getContents())
+					{
+						if(i == null)
+						{
+							continue;
+						}
+
+						if(i.getType().equals(Material.MAP))
+						{
+							if(i.getEnchantmentLevel(Enchantment.DURABILITY) == 1337)
+							{
+								player.getInventory().remove(i);
+							}
 						}
 					}
 				}

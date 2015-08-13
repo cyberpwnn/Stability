@@ -29,6 +29,7 @@ public class ConfigurationFile
 	private int maxChunkOverload;
 	private int maxRedstoneUpdates;
 	private int chunkGcRam;
+	private boolean enableMaps;
 	
 	private File configurationFile;
 	private FileConfiguration fc;
@@ -106,6 +107,7 @@ public class ConfigurationFile
 		this.maxChunkOverload = fc.getInt(Final.ALG_CHUNK_MAX_OVERLOAD);
 		this.maxRedstoneUpdates = fc.getInt(Final.ALG_REDSTONE_MAX_UPDATES_CHUNK);
 		this.chunkGcRam = fc.getInt(Final.ALG_CHUNK_GC_RAM);
+		this.enableMaps = fc.getBoolean(Final.ALG_FEATURE_MAP);
 	}
 
 	public void saveConfig()
@@ -241,5 +243,10 @@ public class ConfigurationFile
 	public int getChunkGcRam()
 	{
 		return chunkGcRam;
+	}
+	
+	public boolean isMapsEnabled()
+	{
+		return enableMaps;
 	}
 }

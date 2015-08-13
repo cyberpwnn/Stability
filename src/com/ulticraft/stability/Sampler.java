@@ -189,8 +189,12 @@ public class Sampler implements Listener
 				if(mapSample > 10)
 				{
 					mapSample = 0;
-					sampleArray.addSample(currentSample);
-					new MapGrapher(pl.getDisbatcher().getMonitors(), sampleArray);
+					
+					if(pl.getConfiguration().isMapsEnabled())
+					{
+						sampleArray.addSample(currentSample);
+						new MapGrapher(pl.getDisbatcher().getMonitors(), sampleArray);
+					}
 				}
 			}
 		}, 40L, sampleInterval);

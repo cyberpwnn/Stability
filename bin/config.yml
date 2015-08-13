@@ -12,7 +12,7 @@ algorithm:
     chunk:
       max-unloads-per-tick: 50
       overload-threshold: 256
-      garbage-collection-ram: 100
+      garbage-collection-ram: 128
     redstone:
       max-updates-per-second: 512
     cull:
@@ -28,3 +28,5 @@ algorithm:
         mobs-peaceful-per-chunk: 0
       other:
         cull-tamable: false
+  feature:
+    map-graph: true

@@ -11,7 +11,7 @@ public class Analyzer
 	private boolean needsGC;
 	private int lagging;
 	
-	public Analyzer(final ActionController ac, final ConfigurationFile config)
+	public Analyzer(ActionController ac, ConfigurationFile config)
 	{
 		this.ac = ac;
 		this.config = config;

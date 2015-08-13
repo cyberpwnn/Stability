@@ -24,8 +24,9 @@ public class Final
 	public static final String ALG_CHUNK_MAX_OVERLOAD = "algorithm.threshold.chunk.overload-threshold";
 	public static final String ALG_REDSTONE_MAX_UPDATES_CHUNK = "algorithm.threshold.redstone.max-updates-per-second";
 	public static final String ALG_CHUNK_GC_RAM = "algorithm.threshold.chunk.garbage-collection-ram";
+	public static final String ALG_FEATURE_MAP = "algorithm.feature.map-graph";
 	public static final String ALG_RESPRED_ = "";
-	public static final String PLUGIN_VERSION = "1.4";
+	public static final String PLUGIN_VERSION = "1.4.1";
 	public static final String PERM_MONITOR = "stability.monitor";
 	public static final String PERM_ACTION = "stability.action";
 	public static final String PERM_RELOAD = "stability.reload";
