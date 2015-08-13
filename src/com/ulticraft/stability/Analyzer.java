@@ -43,7 +43,7 @@ public class Analyzer
 			}
 		}
 		
-		if(sample.getGenerations() > 128)
+		if(sample.getGenerations() > config.getMaxChunkOverload())
 		{
 			action = ChatColor.DARK_RED + "Chunk Overflow";
 
@@ -72,7 +72,7 @@ public class Analyzer
 		
 		else if(needsGC)
 		{
-			if(sample.getFreeMemory() / 1024.0 / 1024.0 < 100)
+			if(sample.getFreeMemory() / 1024.0 / 1024.0 < config.getChunkGcRam())
 			{
 				action = ChatColor.GOLD + "Collecting Garbage";
 				System.gc();

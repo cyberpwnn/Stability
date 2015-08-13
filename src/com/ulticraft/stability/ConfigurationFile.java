@@ -26,6 +26,10 @@ public class ConfigurationFile
 	private int mobPeacefulAThresholdCull;
 	private boolean mobCullOtherTamable;
 	private int maxChunksPerTick;
+	private int maxChunkOverload;
+	private int maxRedstoneUpdates;
+	private int chunkGcRam;
+	
 	private File configurationFile;
 	private FileConfiguration fc;
 
@@ -99,6 +103,9 @@ public class ConfigurationFile
 		this.mobPeacefulAThresholdCull = fc.getInt(Final.ALG_THRESH_ACULL_MOBS_PEACEFUL);
 		this.mobCullOtherTamable = fc.getBoolean(Final.ALG_THRESH_CULL_OTHER_TAME);
 		this.maxChunksPerTick = fc.getInt(Final.ALG_CHUNK_MAX_CULL_TICK);
+		this.maxChunkOverload = fc.getInt(Final.ALG_CHUNK_MAX_OVERLOAD);
+		this.maxRedstoneUpdates = fc.getInt(Final.ALG_REDSTONE_MAX_UPDATES_CHUNK);
+		this.chunkGcRam = fc.getInt(Final.ALG_CHUNK_GC_RAM);
 	}
 
 	public void saveConfig()
@@ -219,5 +226,20 @@ public class ConfigurationFile
 	public int getMaxChunksPerTick()
 	{
 		return maxChunksPerTick;
+	}
+	
+	public int getMaxChunkOverload()
+	{
+		return maxChunkOverload;
+	}
+	
+	public int getMaxRedstoneUpdates()
+	{
+		return maxRedstoneUpdates;
+	}
+	
+	public int getChunkGcRam()
+	{
+		return chunkGcRam;
 	}
 }

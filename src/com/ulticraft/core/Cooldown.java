@@ -26,7 +26,7 @@ public class Cooldown
 			return false;
 		}
 		
-		if(cooldowns.get(player.getName()) < (System.currentTimeMillis() - seconds*1000))
+		if(cooldowns.get(player) < (System.currentTimeMillis() - seconds*1000))
 		{
 			return false;
 		}

@@ -21,8 +21,11 @@ public class Final
 	public static final String ALG_THRESH_CULL_OTHER_TAME = "algorithm.threshold.cull.other.cull-tamable";
 	public static final String ALG_RESPRED_ENABLE = "algorithm.resource-prediction.enable";
 	public static final String ALG_CHUNK_MAX_CULL_TICK = "algorithm.threshold.chunk.max-unloads-per-tick";
+	public static final String ALG_CHUNK_MAX_OVERLOAD = "algorithm.threshold.chunk.overload-threshold";
+	public static final String ALG_REDSTONE_MAX_UPDATES_CHUNK = "algorithm.threshold.redstone.max-updates-per-second";
+	public static final String ALG_CHUNK_GC_RAM = "algorithm.threshold.chunk.garbage-collection-ram";
 	public static final String ALG_RESPRED_ = "";
-	public static final String PLUGIN_VERSION = "1.2";
+	public static final String PLUGIN_VERSION = "1.4";
 	public static final String PERM_MONITOR = "stability.monitor";
 	public static final String PERM_ACTION = "stability.action";
 	public static final String PERM_RELOAD = "stability.reload";
@@ -37,7 +40,7 @@ public class Final
 		TAG_STABILITY = ChatColor.AQUA + "[Stability]: " + ChatColor.WHITE;
 		MSG_HELP = new String[]
 		{
-			ChatColor.AQUA + "Stability v" + "1.0" + " created by " + ChatColor.GREEN + "cyberpwn", 
+			ChatColor.AQUA + "Stability v" + PLUGIN_VERSION + " created by " + ChatColor.GREEN + "cyberpwn", 
 			ChatColor.GREEN + "/st monitor" + ChatColor.YELLOW + " - Server Diagnostics with Title Messages",
 			ChatColor.GREEN + "/st reload" + ChatColor.YELLOW + " - Reload Configuration & Restart Sampler", 
 			ChatColor.GREEN + "/st actions" + ChatColor.YELLOW + " - Invoke Stabilization To clean the runtime"

@@ -170,7 +170,7 @@ public class Disbatcher implements Listener
 				}
 			}, 30L);
 			player.sendMessage(String.valueOf(Final.TAG_STABILITY) + ChatColor.GREEN + "MONITORING ENABLED");
-			player.sendMessage(String.valueOf(Final.TAG_STABILITY) + ChatColor.GREEN + "TPS " + ChatColor.GOLD + "FREEMEM " + ChatColor.RED + "CHUNKS " + ChatColor.LIGHT_PURPLE + "CHUNKGEN " + ChatColor.AQUA + "MOBS " + ChatColor.YELLOW + "DROPS " + ChatColor.DARK_RED + "REDSTONE");
+			player.sendMessage(String.valueOf(Final.TAG_STABILITY) + ChatColor.GREEN + "TPS " + ChatColor.GOLD + "MEM " + ChatColor.RED + "CHUNKS " + ChatColor.LIGHT_PURPLE + "CHUNKGEN " + ChatColor.AQUA + "MOBS " + ChatColor.YELLOW + "DROP " + ChatColor.DARK_RED + "REDSTONE");
 			
 			if(monitoringPlayers.size() > 1)
 			{
@@ -209,10 +209,12 @@ public class Disbatcher implements Listener
 			{
 				tpsm = new StringBuilder().append(ChatColor.GREEN).append(ChatColor.UNDERLINE).append(tpsm).append(ChatColor.RESET).toString();
 			}
+			
 			else
 			{
 				tpsm = ChatColor.GREEN + tpsm + ChatColor.RESET;
 			}
+			
 			if(sampleData.getFreeMemory() / 1024.0 / 1024.0 / (Runtime.getRuntime().maxMemory() / 1024L / 1024L) < this.pl.getConfiguration().getThresholdMem())
 			{
 				memm = new StringBuilder().append(ChatColor.GOLD).append(ChatColor.UNDERLINE).append(memm).append(ChatColor.RESET).toString();
@@ -225,7 +227,7 @@ public class Disbatcher implements Listener
 			
 			String gens = NumberFormat.getNumberInstance(Locale.US).format(gen);
 			
-			if(gen > 128)
+			if(gen > pl.getConfiguration().getMaxChunkOverload())
 			{
 				gens = ChatColor.LIGHT_PURPLE + "" + ChatColor.UNDERLINE + gens + ChatColor.RESET;
 			}
@@ -235,8 +237,18 @@ public class Disbatcher implements Listener
 				gens = ChatColor.LIGHT_PURPLE + gens + ChatColor.RESET;
 			}
 			
-			String reds = ChatColor.DARK_RED + NumberFormat.getNumberInstance(Locale.US).format(sampleData.getRedstoneClocks());
+			String reds = NumberFormat.getNumberInstance(Locale.US).format(sampleData.getRedstoneClocks());
 			
+			if(sampleData.getRedstoneClocks() > pl.getConfiguration().getMaxRedstoneUpdates())
+			{
+				reds = ChatColor.DARK_RED + "" + ChatColor.UNDERLINE + reds + ChatColor.RESET;
+			}
+			
+			else
+			{
+				reds = ChatColor.DARK_RED + reds + ChatColor.RESET;
+			}
+						
 			new Title(action, String.valueOf(tpsm) + " " + memm + " " + ChatColor.RED + NumberFormat.getNumberInstance(Locale.US).format(sampleData.getChunksLoaded()) + " " + gens + " " + ChatColor.AQUA + NumberFormat.getNumberInstance(Locale.US).format(sampleData.getLivingEntities()) + " " + ChatColor.YELLOW + NumberFormat.getNumberInstance(Locale.US).format(sampleData.getDropEntities()) + " " + reds, 0, 10, 20).send(i);
 		}
 	}
