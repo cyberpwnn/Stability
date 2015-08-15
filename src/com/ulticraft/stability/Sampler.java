@@ -91,7 +91,7 @@ public class Sampler implements Listener
 		clockAct++;
 
 		setCurrentSample(sampleData);
-		this.pl.getDisbatcher().disbatchMonitorInformation(sampleData, this.lastAction);
+		this.pl.getDisbatcher().disbatchMonitorInformation(sampleData, this.lastAction, sampleArray);
 
 		if(presampling)
 		{
@@ -178,15 +178,27 @@ public class Sampler implements Listener
 				
 				clockSecond++;
 				
-				sample(new Sample(TPSSample.getTPS(pl.getConfiguration().getTpsSoftness()), freeMemory, maxMemory, chunksLoaded, playersOnline, totalEntities, livingEntities, dropEntities, generations, redstones, upTime));
+				int rms = 0;
 				
-				if(clockSecond == 20)
+				if(!sampleArray.getSamples().isEmpty())
+				{					
+					for(Sample i : sampleArray.getSamples())
+					{
+						rms += i.getRedstoneClocks();
+					}
+					
+					rms /= sampleArray.getSamples().size();
+				}
+				
+				sample(new Sample(TPSSample.getTPS(pl.getConfiguration().getTpsSoftness()), freeMemory, maxMemory, chunksLoaded, playersOnline, totalEntities, livingEntities, dropEntities, generations, (rms+redstones)/2, upTime));
+				
+				if(clockSecond == 2)
 				{
 					clockSecond = 0;
 					redstones = 0;
 				}
 				
-				if(mapSample > 10)
+				if(mapSample > 40)
 				{
 					mapSample = 0;
 					

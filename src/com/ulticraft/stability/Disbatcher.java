@@ -203,7 +203,7 @@ public class Disbatcher implements Listener
 		}
 	}
 
-	public void disbatchMonitorInformation(final Sample sampleData, String action)
+	public void disbatchMonitorInformation(final Sample sampleData, String action, SampleArray array)
 	{
 		for(final Player i : this.monitoringPlayers)
 		{

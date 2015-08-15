@@ -5,6 +5,7 @@ import org.bukkit.ChatColor;
 public class Final
 {
 	public static final String PLUGIN_VERBOSE = "plugin.verbose";
+	public static final String PLUGIN_SCHEMA = "plugin.schema";
 	public static final String ALG_TPS_SOFTNESS = "algorithm.tps-padding";
 	public static final String ALG_SAMPLE_COUNT = "algorithm.sample-count";
 	public static final String ALG_THRESH_TPS = "algorithm.threshold.ticks-per-second";

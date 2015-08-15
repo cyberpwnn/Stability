@@ -15,8 +15,8 @@ public class ActionController implements Listener
 {
 	private Stability pl;
 	private boolean supress;
-
-	public ActionController(final Stability plugin)
+	
+	public ActionController(Stability plugin)
 	{
 		plugin.getServer().getPluginManager().registerEvents((Listener) this, (Plugin) plugin);
 		this.pl = plugin;
@@ -277,6 +277,24 @@ public class ActionController implements Listener
 
 		return culled;
 	}
+	
+	public Chunk[] getNeighboringChunks(Chunk c)
+	{
+		int cx = c.getX();
+		int cz = c.getZ();
+		
+		return new Chunk[]
+		{
+				c.getWorld().getChunkAt(cx+1, cz+1),
+				c.getWorld().getChunkAt(cx+1, cz-1),
+				c.getWorld().getChunkAt(cx-1, cz+1),
+				c.getWorld().getChunkAt(cx-1, cz-1),
+				c.getWorld().getChunkAt(cx+1, cz),
+				c.getWorld().getChunkAt(cx-1, cz),
+				c.getWorld().getChunkAt(cx, cz+1),
+				c.getWorld().getChunkAt(cx, cz-1),
+		};
+	}
 
 	public void supress()
 	{
@@ -292,7 +310,7 @@ public class ActionController implements Listener
 	{
 		return this.supress;
 	}
-
+	
 	@EventHandler
 	public void onEntitySpawn(EntitySpawnEvent event)
 	{

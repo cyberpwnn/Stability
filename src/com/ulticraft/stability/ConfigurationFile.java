@@ -31,37 +31,38 @@ public class ConfigurationFile
 	private int chunkGcRam;
 	private boolean enableMaps;
 	
+	private String schema;
 	private File configurationFile;
 	private FileConfiguration fc;
 
 	public ConfigurationFile(final Stability plugin)
 	{
 		final File pfolder = new File(plugin.getDataFolder() + File.separator);
-		if (!pfolder.exists())
+		if(!pfolder.exists())
 		{
 			pfolder.mkdirs();
 		}
 		this.configurationFile = new File(plugin.getDataFolder() + File.separator + "config.yml");
-		if (!this.configurationFile.exists())
+		if(!this.configurationFile.exists())
 		{
 			try
 			{
-		        if (!configurationFile.exists()) 
-		        {
-		            InputStream jarURL = plugin.getResource("config.yml");
-		            try 
-		            {
-		                copyFile(jarURL, configurationFile);
-		            } 
-		            
-		            catch (Exception ex) 
-		            {
-		            	ex.printStackTrace();
-		            }
-		        }
+				if(!configurationFile.exists())
+				{
+					InputStream jarURL = plugin.getResource("config.yml");
+					try
+					{
+						copyFile(jarURL, configurationFile);
+					}
+
+					catch(Exception ex)
+					{
+						ex.printStackTrace();
+					}
+				}
 			}
 
-			catch (Exception e)
+			catch(Exception e)
 			{
 				e.printStackTrace();
 			}
@@ -74,21 +75,22 @@ public class ConfigurationFile
 			fc.load(this.configurationFile);
 		}
 
-		catch (FileNotFoundException e3)
+		catch(FileNotFoundException e3)
 		{
 			e3.printStackTrace();
 		}
 
-		catch (IOException e4)
+		catch(IOException e4)
 		{
 			e4.printStackTrace();
 		}
 
-		catch (InvalidConfigurationException e5)
+		catch(InvalidConfigurationException e5)
 		{
 			e5.printStackTrace();
 		}
 
+		this.schema = fc.getString(Final.PLUGIN_SCHEMA);
 		this.pluginVerbose = fc.getBoolean(Final.PLUGIN_VERBOSE);
 		this.tpsSoftness = fc.getInt(Final.ALG_TPS_SOFTNESS);
 		this.sampleCount = fc.getInt(Final.ALG_SAMPLE_COUNT);
@@ -116,7 +118,7 @@ public class ConfigurationFile
 		{
 			this.fc.save(this.configurationFile);
 		}
-		catch (IOException e)
+		catch(IOException e)
 		{
 			e.printStackTrace();
 		}
@@ -130,25 +132,25 @@ public class ConfigurationFile
 		{
 			byte[] buf = new byte[1024];
 			int i = 0;
-			while ((i = fis.read(buf)) != -1)
+			while((i = fis.read(buf)) != -1)
 			{
 				fos.write(buf, 0, i);
 			}
 		}
-		
-		catch (Exception e)
+
+		catch(Exception e)
 		{
 			throw e;
 		}
-		
+
 		finally
 		{
-			if (fis != null)
+			if(fis != null)
 			{
 				fis.close();
 			}
-			
-			if (fos != null)
+
+			if(fos != null)
 			{
 				fos.close();
 			}
@@ -224,29 +226,34 @@ public class ConfigurationFile
 	{
 		return mobCullOtherTamable;
 	}
-	
+
 	public int getMaxChunksPerTick()
 	{
 		return maxChunksPerTick;
 	}
-	
+
 	public int getMaxChunkOverload()
 	{
 		return maxChunkOverload;
 	}
-	
+
 	public int getMaxRedstoneUpdates()
 	{
 		return maxRedstoneUpdates;
 	}
-	
+
 	public int getChunkGcRam()
 	{
 		return chunkGcRam;
 	}
-	
+
 	public boolean isMapsEnabled()
 	{
 		return enableMaps;
+	}
+	
+	public String getPluginSchema()
+	{
+		return schema;
 	}
 }
