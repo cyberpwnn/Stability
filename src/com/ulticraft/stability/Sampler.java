@@ -24,6 +24,7 @@ public class Sampler implements Listener
 	private Analyzer ana;
 	private Stability pl;
 	private int taskId;
+	private Prediction pr;
 	private String lastAction;
 	private int lastActed;
 	private int msgIncrement;
@@ -54,6 +55,7 @@ public class Sampler implements Listener
 		this.scheduler = plugin.getServer().getScheduler();
 		this.ana = new Analyzer(new ActionController(plugin), plugin.getConfiguration());
 		this.lastAction = "";
+		this.pr = new Prediction(plugin);
 		this.lastActed = 0;
 		this.msgIncrement = 0;
 		this.pl = plugin;
@@ -108,6 +110,8 @@ public class Sampler implements Listener
 			
 			clockAct = 0;
 		}
+		
+		pr.addSample(sampleData);
 		
 		clockAct++;
 
@@ -273,7 +277,8 @@ public class Sampler implements Listener
 		
 		sender.sendMessage(Final.TAG_STABILITY + ChatColor.AQUA + "SAMPLES: " + sampled + " LAG PERCENT: " + df.format(lagPCT));
 		sender.sendMessage(Final.TAG_STABILITY + ChatColor.GREEN + "TPS: " + String.valueOf((double)tavgtps/(double)sampled) + " RAM: " + tavgram/sampled);
-		sender.sendMessage(Final.TAG_STABILITY + ChatColor.AQUA + "PLR: " + String.valueOf((double)tavgplr/(double)sampled) + " CHUNKS" + tavgchkdbl/sampled);
+		sender.sendMessage(Final.TAG_STABILITY + ChatColor.YELLOW + "PLR: " + String.valueOf((double)tavgplr/(double)sampled) + " CHUNKS" + tavgchkdbl/sampled);
+		sender.sendMessage(Final.TAG_STABILITY + ChatColor.GOLD + "ACTUAL PLAYERLIMIT: " + pr.getMaxPlayers());
 	}
 
 	public void stop()
