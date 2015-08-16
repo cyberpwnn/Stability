@@ -1,3 +1,5 @@
+![Stability Logo](https://raw.githubusercontent.com/danielmills/Stability/master/build/stability.png)
+
 # Stability
 Stability to the minecraft servers! Stability uses samples to analyze what is going on, and what can be done to eliminate server lag / other issues. What Stability does NOT do is clear lag on a timer. Stability is automatic, and quick to do what it needs to do when needed. Stability also keeps a short history of the past samples. Therefore, if the ram is low, stability knows that the mobs, and items did not cause it, since we can measure the increase in chunk load & player count. This can help stability clear chunks instead of wasting time, resources, and player patience.
 
