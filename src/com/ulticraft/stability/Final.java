@@ -28,7 +28,7 @@ public class Final
 	public static final String ALG_CHUNK_GC_RAM = "algorithm.threshold.chunk.garbage-collection-ram";
 	public static final String ALG_FEATURE_MAP = "algorithm.feature.map-graph";
 	public static final String ALG_RESPRED_ = "";
-	public static final String PLUGIN_VERSION = "1.5.1";
+	public static final String PLUGIN_VERSION = "1.5.2";
 	public static final String PERM_MONITOR = "stability.monitor";
 	public static final String PERM_ACTION = "stability.action";
 	public static final String PERM_RELOAD = "stability.reload";

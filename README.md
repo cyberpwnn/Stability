@@ -16,7 +16,7 @@ An important part of making stability work for your server, is the configuration
 Commands and permissions are located on the wiki also!
 
 # Downloads
-[RELEASE v1.5.1](https://github.com/danielmills/Stability/blob/master/build/latest/release/Stability.jar?raw=true)
+[RELEASE v1.5.2](https://github.com/danielmills/Stability/blob/master/build/latest/release/Stability.jar?raw=true)
 
 ## Not Recommended
 [BETA RELEASE v1.5](https://github.com/danielmills/Stability/blob/master/build/latest/beta/Stability.jar?raw=true)

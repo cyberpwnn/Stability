@@ -11,6 +11,7 @@ public class Analyzer
 	private ActionController ac;
 	private ConfigurationFile config;
 	private HashMap<Location, Integer> rhits;
+	private HashMap<Location, Material> removed;
 	private boolean needsChunkGC;
 	private boolean needsCulling;
 	private boolean needsGC;
@@ -102,28 +103,35 @@ public class Analyzer
 			
 			if(clockScan == 2)
 			{
-				clockScanning = false;
-				clockScan = 0;
-				needsRedstoneClock = false;
-				
-				for(Location i : rhits.keySet())
-				{
-					System.out.println(i.getX() + ", " + i.getY() + ", " + i.getZ() + " :: " + rhits.get(i));
-				}
-				
 				int dm = 0;
 				
 				for(Location i : rhits.keySet())
 				{
 					if(rhits.get(i) >= 10)
 					{
+						removed.put(i.getBlock().getLocation(), i.getBlock().getType());
 						i.getBlock().setType(Material.AIR);
 						dm++;
 					}
 				}
 				
-				action = ChatColor.RED + "Disabled " + dm + " Clocks";
+				action = ChatColor.RED + "Breaking " + dm + " Clocks";
+			}
+			
+			if(clockScan == 3)
+			{
+				for(Location i : removed.keySet())
+				{
+					i.getBlock().setType(removed.get(i));
+				}
+				
+				action = ChatColor.RED + "Disabled " + removed.keySet().size() + " Clocks";
+				
+				clockScan = 0;
+				clockScanning = false;
+				needsRedstoneClock = false;
 				rhits = new HashMap<Location, Integer>();
+				removed = new HashMap<Location, Material>();
 			}
 		}
 		
