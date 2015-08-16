@@ -5,6 +5,7 @@ import java.text.DecimalFormat;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.World;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -35,7 +36,17 @@ public class Sampler implements Listener
 	private int clockGen;
 	private int clockAct;
 	private int clockSecond;
+	private int clockDispatch;
 	private int redstones;
+	
+	private long sampled;
+	private long tavgtps;
+	private long tavgram;
+	private long tavgchkdbl;
+	private long tavgchkld;
+	private long tavgplr;
+	private long tavglagpct;
+	private long sampleLag;
 	
 	public Sampler(final Stability plugin, final int sampleInterval, final int sampleCount)
 	{
@@ -56,6 +67,16 @@ public class Sampler implements Listener
 		this.clockAct = 0;
 		this.clockSecond = 0;
 		this.redstones = 0;
+		this.clockDispatch = 0;
+		
+		this.sampled = 0l;
+		this.tavgtps = 0l;
+		this.tavgram = 0l;
+		this.tavgchkdbl = 0l;
+		this.tavgchkld = 0l;
+		this.tavgplr = 0l;
+		this.tavglagpct = 0l;
+		this.sampleLag = 0l;
 		
 		this.scheduler.scheduleSyncRepeatingTask((Plugin) plugin, (Runnable) new TPSSample(), 20L, 1L);
 	}
@@ -91,8 +112,27 @@ public class Sampler implements Listener
 		clockAct++;
 
 		setCurrentSample(sampleData);
-		this.pl.getDisbatcher().disbatchMonitorInformation(sampleData, this.lastAction, sampleArray);
-
+		
+		clockDispatch++;
+		
+		if(pl.getDisbatcher().getMonitors().size() > pl.getConfiguration().getDispatchThreshold())
+		{
+			if(clockDispatch >= pl.getConfiguration().getDispatchThresholdTick())
+			{
+				this.pl.getDisbatcher().disbatchMonitorInformation(sampleData, this.lastAction, sampleArray);
+				clockDispatch = 0;
+			}
+		}
+		
+		else
+		{
+			if(clockDispatch >= pl.getConfiguration().getDispatchTick())
+			{
+				this.pl.getDisbatcher().disbatchMonitorInformation(sampleData, this.lastAction, sampleArray);
+				clockDispatch = 0;
+			}
+		}
+		
 		if(presampling)
 		{
 			msgIncrement++;
@@ -123,6 +163,18 @@ public class Sampler implements Listener
 					msgIncrement = 0;
 				}
 			}
+		}
+		
+		sampled++;
+		tavgtps += sampleData.getTps();
+		tavgchkld += sampleData.getGenerations();
+		tavgchkdbl += sampleData.getChunksLoaded();
+		tavgplr += sampleData.getPlayersOnline();
+		tavgram += sampleData.getFreeMemory();
+		
+		if(getAnalyzer().getLag() > 0)
+		{
+			tavglagpct++;
 		}
 	}
 
@@ -158,6 +210,7 @@ public class Sampler implements Listener
 							{
 								++livingEntities;
 							}
+							
 							else if(k.getType().equals((Object) EntityType.DROPPED_ITEM))
 							{
 								++dropEntities;
@@ -211,6 +264,17 @@ public class Sampler implements Listener
 			}
 		}, 40L, sampleInterval);
 	}
+	
+	public void informPlayer(CommandSender sender)
+	{
+		DecimalFormat df = new DecimalFormat("#.#");
+		
+		double lagPCT = 100 * ((double)tavglagpct/(double)sampled);
+		
+		sender.sendMessage(Final.TAG_STABILITY + ChatColor.AQUA + "SAMPLES: " + sampled + " LAG PERCENT: " + df.format(lagPCT));
+		sender.sendMessage(Final.TAG_STABILITY + ChatColor.GREEN + "TPS: " + String.valueOf((double)tavgtps/(double)sampled) + " RAM: " + tavgram/sampled);
+		sender.sendMessage(Final.TAG_STABILITY + ChatColor.AQUA + "PLR: " + String.valueOf((double)tavgplr/(double)sampled) + " CHUNKS" + tavgchkdbl/sampled);
+	}
 
 	public void stop()
 	{
@@ -237,6 +301,121 @@ public class Sampler implements Listener
 		return ana;
 	}
 	
+	public long getSampleInterval()
+	{
+		return sampleInterval;
+	}
+
+	public Analyzer getAna()
+	{
+		return ana;
+	}
+
+	public String getLastAction()
+	{
+		return lastAction;
+	}
+
+	public int getLastActed()
+	{
+		return lastActed;
+	}
+
+	public int getMsgIncrement()
+	{
+		return msgIncrement;
+	}
+
+	public boolean isPresampling()
+	{
+		return presampling;
+	}
+
+	public double getLastPercent()
+	{
+		return lastPercent;
+	}
+
+	public int getGenerations()
+	{
+		return generations;
+	}
+
+	public SampleArray getSampleArray()
+	{
+		return sampleArray;
+	}
+
+	public int getMapSample()
+	{
+		return mapSample;
+	}
+
+	public int getClockGen()
+	{
+		return clockGen;
+	}
+
+	public int getClockAct()
+	{
+		return clockAct;
+	}
+
+	public int getClockSecond()
+	{
+		return clockSecond;
+	}
+
+	public int getClockDispatch()
+	{
+		return clockDispatch;
+	}
+
+	public int getRedstones()
+	{
+		return redstones;
+	}
+
+	public long getSampled()
+	{
+		return sampled;
+	}
+
+	public long getTavgtps()
+	{
+		return tavgtps;
+	}
+
+	public long getTavgram()
+	{
+		return tavgram;
+	}
+
+	public long getTavgchkdbl()
+	{
+		return tavgchkdbl;
+	}
+
+	public long getTavgchkld()
+	{
+		return tavgchkld;
+	}
+
+	public long getTavgplr()
+	{
+		return tavgplr;
+	}
+
+	public long getTavglagpct()
+	{
+		return tavglagpct;
+	}
+
+	public long getSampleLag()
+	{
+		return sampleLag;
+	}
+
 	@EventHandler
 	public void onGenerateChunk(ChunkLoadEvent event)
 	{

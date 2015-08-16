@@ -3,7 +3,7 @@
 
 plugin:
   verbose: false
-  schema: 1.5
+  schema: 1.5.2
 algorithm:
   tps-padding: 175
   sample-count: 8
@@ -32,3 +32,8 @@ algorithm:
         cull-tamable: false
   feature:
     map-graph: true
+    dispatcher:
+      display-ticks: 4
+      dispatcher-suppression:
+        monitor-threshold: 8
+        display-ticks: 20

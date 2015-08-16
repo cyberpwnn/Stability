@@ -31,6 +31,9 @@ public class ConfigurationFile
 	private int chunkGcRam;
 	private boolean enableMaps;
 	private boolean enableActClockBreak;
+	private int dispatchTick;
+	private int dispatchThreshold;
+	private int dispatchThresholdTick;
 	
 	private String schema;
 	private File configurationFile;
@@ -112,6 +115,9 @@ public class ConfigurationFile
 		this.chunkGcRam = fc.getInt(Final.ALG_CHUNK_GC_RAM);
 		this.enableMaps = fc.getBoolean(Final.ALG_FEATURE_MAP);
 		this.enableActClockBreak = fc.getBoolean(Final.ALG_REDSTONE_ACT_BREAK_CLOCKS);
+		this.dispatchTick = fc.getInt(Final.ALG_FEATURE_DISP_TICK);
+		this.dispatchThreshold = fc.getInt(Final.ALG_FEATURE_DISP_SUPPRESSION_THRESH);
+		this.dispatchThresholdTick = fc.getInt(Final.ALG_FEATURE_DISP_SUPPRESSION_DISP_TICK);
 		
 		boolean invalid = false;
 		
@@ -301,5 +307,45 @@ public class ConfigurationFile
 	public boolean canBreakClocks()
 	{
 		return enableActClockBreak;
+	}
+
+	public int getDispatchTick()
+	{
+		return dispatchTick;
+	}
+
+	public int getDispatchThreshold()
+	{
+		return dispatchThreshold;
+	}
+
+	public int getDispatchThresholdTick()
+	{
+		return dispatchThresholdTick;
+	}
+
+	public String getSchema()
+	{
+		return schema;
+	}
+
+	public boolean isEnableMaps()
+	{
+		return enableMaps;
+	}
+
+	public boolean isEnableActClockBreak()
+	{
+		return enableActClockBreak;
+	}
+
+	public File getConfigurationFile()
+	{
+		return configurationFile;
+	}
+
+	public FileConfiguration getFc()
+	{
+		return fc;
 	}
 }

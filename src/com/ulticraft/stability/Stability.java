@@ -3,6 +3,7 @@ package com.ulticraft.stability;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 import org.bukkit.ChatColor;
+import org.bukkit.Chunk;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -12,7 +13,7 @@ public class Stability extends JavaPlugin
 {
 	private Logger logger;
 	private ConfigurationFile config;
-	private Disbatcher disp;
+	private Dispatcher disp;
 	private Sampler sampler;
 	private static boolean verbose;
 
@@ -22,8 +23,8 @@ public class Stability extends JavaPlugin
 		this.config = new ConfigurationFile(this);
 		Stability.verbose = this.config.isPluginVerbose();
 		this.verbose("Loaded Config");
-		this.disp = new Disbatcher(this);
-		this.verbose("Started Disbatcher");
+		this.disp = new Dispatcher(this);
+		this.verbose("Started Dispatcher");
 		this.sampler = new Sampler(this, 1, this.config.getSampleCount());
 		this.verbose("Scheduled Sampler for execution in 40 ticks with a " + this.config.getSampleCount() + " sample count");
 		this.log("Enabling Stability by cyberpwn");
@@ -90,7 +91,7 @@ public class Stability extends JavaPlugin
 			{
 				this.config = new ConfigurationFile(this);
 				final ArrayList<Player> mons = this.disp.getMonitors();
-				(this.disp = new Disbatcher(this)).setMonitors(mons);
+				(this.disp = new Dispatcher(this)).setMonitors(mons);
 				this.sampler.stop();
 				this.sampler.start();
 				sender.sendMessage(String.valueOf(Final.TAG_STABILITY) + ChatColor.GREEN + "Reloaded Config & Restarted Sampler");
@@ -118,7 +119,9 @@ public class Stability extends JavaPlugin
 				{
 					sampler.getAnalyzer().requestChunkGC();
 					sender.sendMessage(String.valueOf(Final.TAG_STABILITY) + ChatColor.GREEN + "Requested to Purge Chunks");
+					getDisbatcher().notifyPlayers("Purge Chunks", sender.getName());
 				}
+				
 				else if(args[1].equalsIgnoreCase("cullmobs") || args[1].equalsIgnoreCase("cm"))
 				{
 					if(args.length == 3)
@@ -127,6 +130,7 @@ public class Stability extends JavaPlugin
 						{
 							sampler.getAnalyzer().requestCull();
 							sender.sendMessage(String.valueOf(Final.TAG_STABILITY) + ChatColor.GREEN + "Requested to Cull Mobs");
+							getDisbatcher().notifyPlayers("Cull Mobs", sender.getName());
 						}
 					}
 
@@ -134,8 +138,10 @@ public class Stability extends JavaPlugin
 					{
 						if(sender instanceof Player)
 						{
+							Chunk cm = ((Player)sender).getLocation().getChunk();
 							int[] culled = ac.cullMobSingleChunk(((Player) sender).getLocation().getChunk(), config.getMobThresholdCull(), config.getMobPeacefulThresholdCull(), config.getMobHostileThresholdCull());
 							sender.sendMessage(String.valueOf(Final.TAG_STABILITY) + ChatColor.GREEN + "Culled " + ChatColor.YELLOW + (culled[0] + culled[1]) + ChatColor.GREEN + " mobs! In your Chunk!" + ChatColor.LIGHT_PURPLE + " (H: " + culled[0] + " P: " + culled[1] + ")");
+							getDisbatcher().notifyPlayers("Cull Mobs in CHUNK[" + cm.getX() + ", " + cm.getZ() + "]", sender.getName());
 						}
 
 						else
@@ -149,6 +155,7 @@ public class Stability extends JavaPlugin
 				{
 					sampler.getAnalyzer().requestGC();
 					sender.sendMessage(String.valueOf(Final.TAG_STABILITY) + ChatColor.GREEN + "Requesting Garbage Collecter");
+					getDisbatcher().notifyPlayers("Collect Garbage", sender.getName());
 				}
 				
 				else if(args[1].equalsIgnoreCase("breakclocks") || args[1].equalsIgnoreCase("bc"))
@@ -157,6 +164,7 @@ public class Stability extends JavaPlugin
 					{
 						sampler.getAnalyzer().requestUnclock();
 						sender.sendMessage(String.valueOf(Final.TAG_STABILITY) + ChatColor.GREEN + "Requesting to Break Clocks");
+						getDisbatcher().notifyPlayers("Break Clocks", sender.getName());
 					}
 					
 					else
@@ -193,6 +201,20 @@ public class Stability extends JavaPlugin
 				sender.sendMessage(String.valueOf(Final.TAG_STABILITY) + ChatColor.RED + "You do not have permission to view actions!");
 			}
 		}
+		
+		else if(args[0].equalsIgnoreCase("status") || args[0].equalsIgnoreCase("st"))
+		{
+			if(sender.hasPermission("stability.info"))
+			{
+				sampler.informPlayer(sender);
+			}
+			
+			else
+			{
+				sender.sendMessage(String.valueOf(Final.TAG_STABILITY) + ChatColor.RED + "You do not have permission to view actions!");
+			}
+		}
+		
 		else
 		{
 			sender.sendMessage(String.valueOf(Final.TAG_STABILITY) + ChatColor.RED + "Unknow Parameter, use /st for help!");
@@ -241,7 +263,7 @@ public class Stability extends JavaPlugin
 		return this.sampler;
 	}
 
-	public Disbatcher getDisbatcher()
+	public Dispatcher getDisbatcher()
 	{
 		return this.disp;
 	}

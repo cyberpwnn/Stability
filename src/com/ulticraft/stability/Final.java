@@ -27,6 +27,9 @@ public class Final
 	public static final String ALG_REDSTONE_ACT_BREAK_CLOCKS = "algorithm.threshold.redstone.action-break-clocks";
 	public static final String ALG_CHUNK_GC_RAM = "algorithm.threshold.chunk.garbage-collection-ram";
 	public static final String ALG_FEATURE_MAP = "algorithm.feature.map-graph";
+	public static final String ALG_FEATURE_DISP_TICK = "algorithm.feature.dispatcher.display-ticks";
+	public static final String ALG_FEATURE_DISP_SUPPRESSION_THRESH = "algorithm.feature.dispatcher.dispatcher-suppression.monitor-threshold";
+	public static final String ALG_FEATURE_DISP_SUPPRESSION_DISP_TICK = "algorithm.feature.dispatcher.dispatcher-suppression.display-ticks";
 	public static final String ALG_RESPRED_ = "";
 	public static final String PLUGIN_VERSION = "1.5.2";
 	public static final String PERM_MONITOR = "stability.monitor";
@@ -45,6 +48,7 @@ public class Final
 		{
 			ChatColor.AQUA + "Stability v" + PLUGIN_VERSION + " created by " + ChatColor.GREEN + "cyberpwn", 
 			ChatColor.GREEN + "/st monitor" + ChatColor.YELLOW + " - Server Diagnostics with Title Messages",
+			ChatColor.GREEN + "/st status" + ChatColor.YELLOW + " - Stability Instance Information",
 			ChatColor.GREEN + "/st reload" + ChatColor.YELLOW + " - Reload Configuration & Restart Sampler", 
 			ChatColor.GREEN + "/st actions" + ChatColor.YELLOW + " - Invoke Stabilization To clean the runtime"
 		};
