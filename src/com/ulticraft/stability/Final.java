@@ -43,7 +43,7 @@ public class Final
 
 	static
 	{
-		TAG_STABILITY = ChatColor.AQUA + "[Stability]: " + ChatColor.WHITE;
+		TAG_STABILITY = ChatColor.AQUA + "[" + ChatColor.DARK_GRAY + "Stability" + ChatColor.AQUA + "]" + ChatColor.DARK_AQUA + ": " + ChatColor.WHITE;
 		MSG_HELP = new String[]
 		{
 			ChatColor.AQUA + "Stability v" + PLUGIN_VERSION + " created by " + ChatColor.GREEN + "cyberpwn", 

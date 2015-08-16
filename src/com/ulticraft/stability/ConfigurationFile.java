@@ -38,9 +38,12 @@ public class ConfigurationFile
 	private String schema;
 	private File configurationFile;
 	private FileConfiguration fc;
+	private Stability plugin;
 
 	public ConfigurationFile(final Stability plugin)
 	{
+		this.plugin = plugin;
+		
 		final File pfolder = new File(plugin.getDataFolder() + File.separator);
 		if(!pfolder.exists())
 		{
@@ -118,6 +121,8 @@ public class ConfigurationFile
 		this.dispatchTick = fc.getInt(Final.ALG_FEATURE_DISP_TICK);
 		this.dispatchThreshold = fc.getInt(Final.ALG_FEATURE_DISP_SUPPRESSION_THRESH);
 		this.dispatchThresholdTick = fc.getInt(Final.ALG_FEATURE_DISP_SUPPRESSION_DISP_TICK);
+		
+		update();
 		
 		boolean invalid = false;
 		
@@ -201,6 +206,133 @@ public class ConfigurationFile
 			{
 				fos.close();
 			}
+		}
+	}
+	
+	public void update()
+	{
+		if(!getSchema().equals(Final.PLUGIN_VERSION))
+		{
+			FileConfiguration nfc = new YamlConfiguration();
+			
+			configurationFile.delete();
+			
+			this.configurationFile = new File(plugin.getDataFolder() + File.separator + "config.yml");
+			if(!this.configurationFile.exists())
+			{
+				try
+				{
+					if(!configurationFile.exists())
+					{
+						InputStream jarURL = plugin.getResource("config.yml");
+						try
+						{
+							copyFile(jarURL, configurationFile);
+						}
+
+						catch(Exception ex)
+						{
+							ex.printStackTrace();
+						}
+					}
+				}
+
+				catch(Exception e)
+				{
+					e.printStackTrace();
+				}
+			}
+			
+			try
+			{
+				nfc.load(this.configurationFile);
+			}
+
+			catch(FileNotFoundException e3)
+			{
+				e3.printStackTrace();
+			}
+
+			catch(IOException e4)
+			{
+				e4.printStackTrace();
+			}
+
+			catch(InvalidConfigurationException e5)
+			{
+				e5.printStackTrace();
+			}
+			
+			this.schema = nfc.getString(Final.PLUGIN_SCHEMA);
+			this.pluginVerbose = nfc.getBoolean(Final.PLUGIN_VERBOSE);
+			this.tpsSoftness = nfc.getInt(Final.ALG_TPS_SOFTNESS);
+			this.sampleCount = nfc.getInt(Final.ALG_SAMPLE_COUNT);
+			this.thresholdTps = nfc.getDouble(Final.ALG_THRESH_TPS);
+			this.thresholdMem = nfc.getDouble(Final.ALG_THRESH_MEM) / 100.0;
+			this.enableMobThresholdCull = nfc.getBoolean(Final.ALG_THRESH_CULL_ENABLE);
+			this.mobThresholdCull = nfc.getInt(Final.ALG_THRESH_CULL_MOBS);
+			this.mobHostileThresholdCull = nfc.getInt(Final.ALG_THRESH_CULL_MOBS_HOSTILE);
+			this.mobPeacefulThresholdCull = nfc.getInt(Final.ALG_THRESH_CULL_MOBS_PEACEFUL);
+			this.enableAMobThresholdCull = nfc.getBoolean(Final.ALG_THRESH_ACULL_ENABLE);
+			this.mobAThresholdCull = nfc.getInt(Final.ALG_THRESH_ACULL_MOBS);
+			this.mobHostileAThresholdCull = nfc.getInt(Final.ALG_THRESH_ACULL_MOBS_HOSTILE);
+			this.mobPeacefulAThresholdCull = nfc.getInt(Final.ALG_THRESH_ACULL_MOBS_PEACEFUL);
+			this.mobCullOtherTamable = nfc.getBoolean(Final.ALG_THRESH_CULL_OTHER_TAME);
+			this.maxChunksPerTick = nfc.getInt(Final.ALG_CHUNK_MAX_CULL_TICK);
+			this.maxChunkOverload = nfc.getInt(Final.ALG_CHUNK_MAX_OVERLOAD);
+			this.maxRedstoneUpdates = nfc.getInt(Final.ALG_REDSTONE_MAX_UPDATES_CHUNK);
+			this.chunkGcRam = nfc.getInt(Final.ALG_CHUNK_GC_RAM);
+			this.enableMaps = nfc.getBoolean(Final.ALG_FEATURE_MAP);
+			this.enableActClockBreak = nfc.getBoolean(Final.ALG_REDSTONE_ACT_BREAK_CLOCKS);
+			this.dispatchTick = nfc.getInt(Final.ALG_FEATURE_DISP_TICK);
+			this.dispatchThreshold = nfc.getInt(Final.ALG_FEATURE_DISP_SUPPRESSION_THRESH);
+			this.dispatchThresholdTick = nfc.getInt(Final.ALG_FEATURE_DISP_SUPPRESSION_DISP_TICK);
+			
+			for(String i : nfc.getValues(false).keySet())
+			{
+				if(fc.contains(i))
+				{
+					nfc.set(i, fc.get(i));
+					plugin.log("UPDATING CONFIG: " + i);
+				}
+			}
+			
+			try
+			{
+				nfc.save(configurationFile);
+			}
+			
+			catch(IOException e)
+			{
+				e.printStackTrace();
+			}
+			
+			fc = nfc;
+			
+			this.schema = fc.getString(Final.PLUGIN_SCHEMA);
+			this.pluginVerbose = fc.getBoolean(Final.PLUGIN_VERBOSE);
+			this.tpsSoftness = fc.getInt(Final.ALG_TPS_SOFTNESS);
+			this.sampleCount = fc.getInt(Final.ALG_SAMPLE_COUNT);
+			this.thresholdTps = fc.getDouble(Final.ALG_THRESH_TPS);
+			this.thresholdMem = fc.getDouble(Final.ALG_THRESH_MEM) / 100.0;
+			this.enableMobThresholdCull = fc.getBoolean(Final.ALG_THRESH_CULL_ENABLE);
+			this.mobThresholdCull = fc.getInt(Final.ALG_THRESH_CULL_MOBS);
+			this.mobHostileThresholdCull = fc.getInt(Final.ALG_THRESH_CULL_MOBS_HOSTILE);
+			this.mobPeacefulThresholdCull = fc.getInt(Final.ALG_THRESH_CULL_MOBS_PEACEFUL);
+			this.enableAMobThresholdCull = fc.getBoolean(Final.ALG_THRESH_ACULL_ENABLE);
+			this.mobAThresholdCull = fc.getInt(Final.ALG_THRESH_ACULL_MOBS);
+			this.mobHostileAThresholdCull = fc.getInt(Final.ALG_THRESH_ACULL_MOBS_HOSTILE);
+			this.mobPeacefulAThresholdCull = fc.getInt(Final.ALG_THRESH_ACULL_MOBS_PEACEFUL);
+			this.mobCullOtherTamable = fc.getBoolean(Final.ALG_THRESH_CULL_OTHER_TAME);
+			this.maxChunksPerTick = fc.getInt(Final.ALG_CHUNK_MAX_CULL_TICK);
+			this.maxChunkOverload = fc.getInt(Final.ALG_CHUNK_MAX_OVERLOAD);
+			this.maxRedstoneUpdates = fc.getInt(Final.ALG_REDSTONE_MAX_UPDATES_CHUNK);
+			this.chunkGcRam = fc.getInt(Final.ALG_CHUNK_GC_RAM);
+			this.enableMaps = fc.getBoolean(Final.ALG_FEATURE_MAP);
+			this.enableActClockBreak = fc.getBoolean(Final.ALG_REDSTONE_ACT_BREAK_CLOCKS);
+			this.dispatchTick = fc.getInt(Final.ALG_FEATURE_DISP_TICK);
+			this.dispatchThreshold = fc.getInt(Final.ALG_FEATURE_DISP_SUPPRESSION_THRESH);
+			this.dispatchThresholdTick = fc.getInt(Final.ALG_FEATURE_DISP_SUPPRESSION_DISP_TICK);
 		}
 	}
 

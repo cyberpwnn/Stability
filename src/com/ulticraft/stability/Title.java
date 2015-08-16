@@ -367,4 +367,59 @@ public class Title
 		}
 		return equal;
 	}
+
+	public Class<?> getPacketTitle()
+	{
+		return packetTitle;
+	}
+
+	public Class<?> getPacketActions()
+	{
+		return packetActions;
+	}
+
+	public Class<?> getNmsChatSerializer()
+	{
+		return nmsChatSerializer;
+	}
+
+	public Class<?> getChatBaseComponent()
+	{
+		return chatBaseComponent;
+	}
+
+	public ChatColor getTitleColor()
+	{
+		return titleColor;
+	}
+
+	public ChatColor getSubtitleColor()
+	{
+		return subtitleColor;
+	}
+
+	public int getFadeInTime()
+	{
+		return fadeInTime;
+	}
+
+	public int getStayTime()
+	{
+		return stayTime;
+	}
+
+	public int getFadeOutTime()
+	{
+		return fadeOutTime;
+	}
+
+	public boolean isTicks()
+	{
+		return ticks;
+	}
+
+	public static Map<Class<?>, Class<?>> getCorrespondingTypes()
+	{
+		return CORRESPONDING_TYPES;
+	}
 }
