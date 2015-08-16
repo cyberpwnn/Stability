@@ -6,4 +6,5 @@ Stability to the minecraft servers!
 
 ### Not Recommended
 [BETA RELEASE v1.5](https://github.com/danielmills/Stability/blob/master/build/latest/beta/Stability.jar?raw=true)
+
 [STILL BLEEDING v1.4.1](https://github.com/danielmills/Stability/blob/master/build/latest/bleeding/Stability.jar?raw=true)
