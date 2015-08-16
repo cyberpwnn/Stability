@@ -11,7 +11,7 @@ Sometimes, there may be some resource fighting, which stability cannot detect. I
 An important part of making stability work for your server, is the configuration. Not every server is the same, nor is it backed with the same processor (or array of them!). This means that "lag" is a different number on every server (decimals). In the configuration, you are able to define a threshold for many "sample components". Please check the wiki on the right for more information on configuring
 
 ## Commands & Permissions
-Commands and permissions are located here?
+Commands and permissions are located on the wiki also!
 
 # Downloads
 [RELEASE v1.5.1](https://github.com/danielmills/Stability/blob/master/build/latest/release/Stability.jar?raw=true)
