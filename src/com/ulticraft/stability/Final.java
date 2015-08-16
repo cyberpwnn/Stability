@@ -23,11 +23,12 @@ public class Final
 	public static final String ALG_RESPRED_ENABLE = "algorithm.resource-prediction.enable";
 	public static final String ALG_CHUNK_MAX_CULL_TICK = "algorithm.threshold.chunk.max-unloads-per-tick";
 	public static final String ALG_CHUNK_MAX_OVERLOAD = "algorithm.threshold.chunk.overload-threshold";
-	public static final String ALG_REDSTONE_MAX_UPDATES_CHUNK = "algorithm.threshold.redstone.max-updates-per-second";
+	public static final String ALG_REDSTONE_MAX_UPDATES_CHUNK = "algorithm.threshold.redstone.max-updates-per-rtick";
+	public static final String ALG_REDSTONE_ACT_BREAK_CLOCKS = "algorithm.threshold.redstone.action-break-clocks";
 	public static final String ALG_CHUNK_GC_RAM = "algorithm.threshold.chunk.garbage-collection-ram";
 	public static final String ALG_FEATURE_MAP = "algorithm.feature.map-graph";
 	public static final String ALG_RESPRED_ = "";
-	public static final String PLUGIN_VERSION = "1.4.1";
+	public static final String PLUGIN_VERSION = "1.5.1";
 	public static final String PERM_MONITOR = "stability.monitor";
 	public static final String PERM_ACTION = "stability.action";
 	public static final String PERM_RELOAD = "stability.reload";
@@ -53,7 +54,8 @@ public class Final
 			ChatColor.YELLOW + "Use /st act <action>",
 			ChatColor.RED + "purgechunks " + ChatColor.LIGHT_PURPLE + "(pc)",
 			ChatColor.GREEN + "cullmobs " + ChatColor.LIGHT_PURPLE + "(cm)", 
-			ChatColor.GOLD + "collectgarbage " + ChatColor.LIGHT_PURPLE + "(gc)"
+			ChatColor.GOLD + "collectgarbage " + ChatColor.LIGHT_PURPLE + "(gc)",
+			ChatColor.DARK_RED + "breakclocks " + ChatColor.LIGHT_PURPLE + "(bc)"
 		};
 	}
 }

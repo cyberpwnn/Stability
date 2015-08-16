@@ -1,6 +1,7 @@
 package com.ulticraft.stability;
 
 import java.util.ArrayList;
+import java.util.List;
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
@@ -21,6 +22,11 @@ public class ActionController implements Listener
 		plugin.getServer().getPluginManager().registerEvents((Listener) this, (Plugin) plugin);
 		this.pl = plugin;
 		this.supress = false;
+	}
+	
+	public List<World> getWorlds()
+	{
+		return pl.getServer().getWorlds();
 	}
 	
 	public void syncPurge()

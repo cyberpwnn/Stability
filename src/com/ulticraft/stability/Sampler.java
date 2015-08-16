@@ -62,10 +62,10 @@ public class Sampler implements Listener
 
 	public void sample(Sample sampleData)
 	{
-		if(clockAct > 20)
+		if(clockAct > 40)
 		{
 			String act = ana.analyze(sampleData, sampleArray);
-			if(ana.getLag() > 8)
+			if(ana.getLag() > 10)
 			{
 				pl.getDisbatcher().notifyLag();
 			}
@@ -78,7 +78,7 @@ public class Sampler implements Listener
 			if(this.lastAction != "")
 			{
 				++this.lastActed;
-				if(this.lastActed > 4)
+				if(this.lastActed > 2)
 				{
 					this.lastAction = "";
 					this.lastActed = 0;
@@ -247,5 +247,6 @@ public class Sampler implements Listener
 	public void onRedstone(BlockRedstoneEvent e)
 	{
 		redstones++;
+		ana.onRedstone(e);
 	}
 }

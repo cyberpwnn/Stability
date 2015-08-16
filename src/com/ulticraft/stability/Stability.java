@@ -52,10 +52,12 @@ public class Stability extends JavaPlugin
 			{
 				this.disp.showHelp(sender);
 			}
+			
 			else
 			{
 				sender.sendMessage(String.valueOf(Final.TAG_STABILITY) + ChatColor.RED + "You do not have permission to use Stability!");
 			}
+			
 			return true;
 		}
 
@@ -78,8 +80,10 @@ public class Stability extends JavaPlugin
 			{
 				sender.sendMessage("Monitoring is for in-game use only!");
 			}
+			
 			return true;
 		}
+		
 		if(args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rel"))
 		{
 			if(sender.hasPermission("stability.reload"))
@@ -91,18 +95,22 @@ public class Stability extends JavaPlugin
 				this.sampler.start();
 				sender.sendMessage(String.valueOf(Final.TAG_STABILITY) + ChatColor.GREEN + "Reloaded Config & Restarted Sampler");
 			}
+			
 			else
 			{
 				sender.sendMessage(String.valueOf(Final.TAG_STABILITY) + ChatColor.RED + "You do not have permission to reload!");
 			}
+			
 			return true;
 		}
+		
 		if(args[0].equalsIgnoreCase("action") || args[0].equalsIgnoreCase("act"))
 		{
 			if(!sender.hasPermission("stability.action"))
 			{
 				sender.sendMessage(String.valueOf(Final.TAG_STABILITY) + ChatColor.RED + "Sorry, you cannot use stabilization invocations!");
 			}
+			
 			if(args.length > 1)
 			{
 				final ActionController ac = new ActionController(this);
@@ -141,6 +149,20 @@ public class Stability extends JavaPlugin
 				{
 					sampler.getAnalyzer().requestGC();
 					sender.sendMessage(String.valueOf(Final.TAG_STABILITY) + ChatColor.GREEN + "Requesting Garbage Collecter");
+				}
+				
+				else if(args[1].equalsIgnoreCase("breakclocks") || args[1].equalsIgnoreCase("bc"))
+				{
+					if(config.canBreakClocks())
+					{
+						sampler.getAnalyzer().requestUnclock();
+						sender.sendMessage(String.valueOf(Final.TAG_STABILITY) + ChatColor.GREEN + "Requesting to Break Clocks");
+					}
+					
+					else
+					{
+						sender.sendMessage(ChatColor.RED + "This action has been disabled!");
+					}
 				}
 
 				else

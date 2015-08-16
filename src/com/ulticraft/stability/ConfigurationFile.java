@@ -30,6 +30,7 @@ public class ConfigurationFile
 	private int maxRedstoneUpdates;
 	private int chunkGcRam;
 	private boolean enableMaps;
+	private boolean enableActClockBreak;
 	
 	private String schema;
 	private File configurationFile;
@@ -110,6 +111,46 @@ public class ConfigurationFile
 		this.maxRedstoneUpdates = fc.getInt(Final.ALG_REDSTONE_MAX_UPDATES_CHUNK);
 		this.chunkGcRam = fc.getInt(Final.ALG_CHUNK_GC_RAM);
 		this.enableMaps = fc.getBoolean(Final.ALG_FEATURE_MAP);
+		this.enableActClockBreak = fc.getBoolean(Final.ALG_REDSTONE_ACT_BREAK_CLOCKS);
+		
+		boolean invalid = false;
+		
+		if(thresholdMem > 0.8)
+		{
+			invalid = true;
+			fc.set(Final.ALG_THRESH_MEM, 80);
+			plugin.warn("CONFIG: MEMORY THRESHOLD TOO HIGH!");
+		}
+		
+		if(thresholdTps > 20)
+		{
+			invalid = true;
+			fc.set(Final.ALG_THRESH_TPS, 20);
+			plugin.warn("CONFIG: TPS THRESHOLD TOO HIGH!");
+		}
+		
+		if(maxChunksPerTick < 75)
+		{
+			invalid = true;
+			fc.set(Final.ALG_CHUNK_MAX_CULL_TICK, 75);
+			plugin.warn("CONFIG: CHUNK SPEED TOO LOW!");
+		}
+		
+		if(invalid)
+		{
+			try
+			{
+				fc.save(configurationFile);
+			}
+			
+			catch(IOException e)
+			{
+				e.printStackTrace();
+			}
+			
+			plugin.error("Some Config Values where invalid or too high/low.");
+			plugin.error("Stability has fixed that for you, please check your config.");
+		}
 	}
 
 	public void saveConfig()
@@ -255,5 +296,10 @@ public class ConfigurationFile
 	public String getPluginSchema()
 	{
 		return schema;
+	}
+	
+	public boolean canBreakClocks()
+	{
+		return enableActClockBreak;
 	}
 }

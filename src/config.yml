@@ -11,11 +11,12 @@ algorithm:
     ticks-per-second: 17.5
     memory-percent: 33.0
     chunk:
-      max-unloads-per-tick: 50
+      max-unloads-per-tick: 100
       overload-threshold: 256
       garbage-collection-ram: 128
     redstone:
-      max-updates-per-second: 64
+      max-updates-per-rtick: 64
+      action-break-clocks: true
     cull:
       adaptive:
         enable: true
