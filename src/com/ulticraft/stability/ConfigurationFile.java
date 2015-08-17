@@ -75,7 +75,7 @@ public class ConfigurationFile
 			}
 		}
 
-		final FileConfiguration fc = new YamlConfiguration();
+		fc = new YamlConfiguration();
 
 		try
 		{

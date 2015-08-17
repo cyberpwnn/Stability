@@ -32,6 +32,7 @@ public class Analyzer
 		this.clockScan = 0;
 		this.clockScanning = false;
 		this.rhits = new HashMap<Location, Integer>();
+		this.removed = new HashMap<Location, Material>();
 	}
 
 	public String analyze(Sample sample, SampleArray sampleArray)
@@ -110,6 +111,7 @@ public class Analyzer
 					if(rhits.get(i) >= 10)
 					{
 						removed.put(i.getBlock().getLocation(), i.getBlock().getType());
+						
 						i.getBlock().setType(Material.AIR);
 						dm++;
 					}

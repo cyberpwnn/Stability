@@ -31,7 +31,7 @@ public class Final
 	public static final String ALG_FEATURE_DISP_SUPPRESSION_THRESH = "algorithm.feature.dispatcher.dispatcher-suppression.monitor-threshold";
 	public static final String ALG_FEATURE_DISP_SUPPRESSION_DISP_TICK = "algorithm.feature.dispatcher.dispatcher-suppression.display-ticks";
 	public static final String ALG_RESPRED_ = "";
-	public static final String PLUGIN_VERSION = "1.5.2";
+	public static final String PLUGIN_VERSION = "1.5.3";
 	public static final String PERM_MONITOR = "stability.monitor";
 	public static final String PERM_ACTION = "stability.action";
 	public static final String PERM_RELOAD = "stability.reload";
