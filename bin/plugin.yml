@@ -1,8 +1,0 @@
-main: com.ulticraft.stability.Stability
-name: Stability
-start: POSTWORLD
-version: 1.5.3
-commands:
-  stability:
-    aliases: st
-    description: Base Stability Command
