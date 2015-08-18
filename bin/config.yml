@@ -1,0 +1,39 @@
+# This is the configuration file for stability!
+# If you dont know what an option is, dont change it drastically!
+
+plugin:
+  verbose: false
+  schema: 1.5.3
+algorithm:
+  tps-padding: 175
+  sample-count: 8
+  threshold:
+    ticks-per-second: 17.5
+    memory-percent: 33.0
+    chunk:
+      max-unloads-per-tick: 100
+      overload-threshold: 256
+      garbage-collection-ram: 128
+    redstone:
+      max-updates-per-rtick: 64
+      action-break-clocks: true
+    cull:
+      adaptive:
+        enable: true
+        mobs-per-chunk: 35
+        mobs-hostile-per-chunk: 0
+        mobs-peaceful-per-chunk: 0
+      active:
+        enable: true
+        mobs-per-chunk: 100
+        mobs-hostile-per-chunk: 0
+        mobs-peaceful-per-chunk: 0
+      other:
+        cull-tamable: false
+  feature:
+    map-graph: true
+    dispatcher:
+      display-ticks: 5
+      dispatcher-suppression:
+        monitor-threshold: 6
+        display-ticks: 20
