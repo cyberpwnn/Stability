@@ -1,7 +1,7 @@
 main: com.ulticraft.stability.Stability
 name: Stability
 start: POSTWORLD
-version: 1.5.3
+version: 1.5.4
 commands:
   stability:
     aliases: st

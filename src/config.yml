@@ -37,3 +37,6 @@ algorithm:
       dispatcher-suppression:
         monitor-threshold: 6
         display-ticks: 20
+    stack-trace-tracer:
+      enable: true
+      max-tick-trace: 600

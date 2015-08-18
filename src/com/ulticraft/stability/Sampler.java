@@ -2,6 +2,7 @@ package com.ulticraft.stability;
 
 import java.lang.management.ManagementFactory;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.World;
@@ -25,6 +26,7 @@ public class Sampler implements Listener
 	private Stability pl;
 	private int taskId;
 	private Prediction pr;
+	private StackTraceMonitor stm;
 	private String lastAction;
 	private int lastActed;
 	private int msgIncrement;
@@ -64,6 +66,7 @@ public class Sampler implements Listener
 		this.sampleInterval = sampleInterval;
 		this.presampling = true;
 		this.sampleArray = new SampleArray();
+		this.stm = new StackTraceMonitor(plugin);
 		this.mapSample = 0;
 		this.clockGen = 0;
 		this.clockAct = 0;
@@ -169,6 +172,16 @@ public class Sampler implements Listener
 			}
 		}
 		
+		if(sampled > 1000)
+		{
+			sampled = 0;
+			tavgtps = 0;
+			tavgchkld = 0;
+			tavgchkdbl = 0;
+			tavgplr = 0;
+			tavgram = 0;
+		}
+		
 		sampled++;
 		tavgtps += sampleData.getTps();
 		tavgchkld += sampleData.getGenerations();
@@ -190,6 +203,8 @@ public class Sampler implements Listener
 			@Override
 			public void run()
 			{
+				stm.trace();
+				
 				double freeMemory = Runtime.getRuntime().maxMemory() - Runtime.getRuntime().totalMemory() + Runtime.getRuntime().freeMemory();
 				double maxMemory = Runtime.getRuntime().maxMemory();
 				long upTime = ManagementFactory.getRuntimeMXBean().getUptime();
@@ -275,10 +290,20 @@ public class Sampler implements Listener
 		
 		double lagPCT = 100 * ((double)tavglagpct/(double)sampled);
 		
-		sender.sendMessage(Final.TAG_STABILITY + ChatColor.AQUA + "SAMPLES: " + sampled + " LAG PERCENT: " + df.format(lagPCT));
-		sender.sendMessage(Final.TAG_STABILITY + ChatColor.GREEN + "TPS: " + String.valueOf((double)tavgtps/(double)sampled) + " RAM: " + tavgram/sampled);
-		sender.sendMessage(Final.TAG_STABILITY + ChatColor.YELLOW + "PLR: " + String.valueOf((double)tavgplr/(double)sampled) + " CHUNKS" + tavgchkdbl/sampled);
+		ArrayList<String> suggs = pr.getSuggestions();
+		
+		sender.sendMessage(ChatColor.DARK_GRAY + "[==============================================]");
+		
+		sender.sendMessage(Final.TAG_STABILITY + ChatColor.AQUA + "SAMPLES: " + sampled + " LAG: " + df.format(lagPCT) + "%");
+		sender.sendMessage(Final.TAG_STABILITY + ChatColor.GREEN + "TPS: " + df.format((double)tavgtps/(double)sampled) + " RAM: " + df.format((tavgram/sampled)/1024/1024));
+		sender.sendMessage(Final.TAG_STABILITY + ChatColor.YELLOW + "PLR: " + df.format((double)tavgplr/(double)sampled) + " CHUNKS: "+ df.format(tavgchkdbl/sampled));
 		sender.sendMessage(Final.TAG_STABILITY + ChatColor.GOLD + "ACTUAL PLAYERLIMIT: " + pr.getMaxPlayers());
+		sender.sendMessage(ChatColor.DARK_GRAY + "[==============================================]");
+		for(String i : suggs)
+		{
+			sender.sendMessage(Final.TAG_STABILITY + ChatColor.RED + i);
+		}
+		sender.sendMessage(ChatColor.DARK_GRAY + "[==============================================]");
 	}
 
 	public void stop()
@@ -419,6 +444,11 @@ public class Sampler implements Listener
 	public long getSampleLag()
 	{
 		return sampleLag;
+	}
+	
+	public StackTraceMonitor getStackTraceMonitor()
+	{
+		return stm;
 	}
 
 	@EventHandler

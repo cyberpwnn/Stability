@@ -105,6 +105,32 @@ public class Stability extends JavaPlugin
 			return true;
 		}
 		
+		if(args[0].equalsIgnoreCase("stacktrace") || args[0].equalsIgnoreCase("stackt"))
+		{
+			if(args.length == 2)
+			{
+				if(sender instanceof Player)
+				{
+					long ticks = Long.parseLong(args[1]);
+					getSampler().getStackTraceMonitor().startTrace(ticks, (Player) sender);
+				}
+				
+				else
+				{
+					sender.sendMessage("Monitoring is for in-game use only!");
+				}
+				
+				return true;
+			}
+			
+			else
+			{
+				sender.sendMessage(ChatColor.RED + "/st stacktrace <TICKS>");
+			}
+			
+			return true;
+		}
+		
 		if(args[0].equalsIgnoreCase("action") || args[0].equalsIgnoreCase("act"))
 		{
 			if(!sender.hasPermission("stability.action"))

@@ -16,11 +16,12 @@ public class Prediction
 	{
 		tpsCross = new HashMap<Integer, ArrayList<Double>>();
 		tpsAvg = new HashMap<Integer, Double>();
+		suggestions = new ArrayList<String>();
 		this.pl = pl;
 	}
 	
 	public void addSample(Sample sample)
-	{
+	{		
 		if(tpsCross.containsKey(sample.getPlayersOnline()))
 		{
 			ArrayList<Double> m = tpsCross.get(sample.getPlayersOnline());
@@ -34,10 +35,25 @@ public class Prediction
 			m.add(sample.getTps());
 			tpsCross.put(sample.getPlayersOnline(), m);
 		}
+		
+		doReset();
+	}
+	
+	public void doReset()
+	{
+		for(Integer i : tpsCross.keySet())
+		{
+			if(tpsCross.get(i).size() > 1000)
+			{
+				tpsCross.get(i).remove(0);
+			}
+		}
 	}
 	
 	public ArrayList<String> getSuggestions()
 	{
+		suggestions = new ArrayList<String>();
+		
 		for(Integer i : tpsCross.keySet())
 		{
 			double currentAvg = 0;

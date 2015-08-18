@@ -40,6 +40,12 @@ public class Dispatcher implements Listener
 	{
 		if(!this.isMonitoringPlayer(player))
 		{
+			if(pl.getSampler().getStackTraceMonitor().isTracing(player))
+			{
+				player.sendMessage("You're tracing the stack right now!");
+				return;
+			}
+			
 			this.monitoringPlayers.add(player);
 			
 			if(pl.getConfiguration().isMapsEnabled())
