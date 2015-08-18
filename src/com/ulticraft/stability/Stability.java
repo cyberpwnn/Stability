@@ -8,6 +8,16 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.primesoft.asyncworldedit.AsyncWorldEditMain;
+import org.primesoft.asyncworldedit.BlocksHubIntegration;
+import org.primesoft.asyncworldedit.ChunkWatch;
+import org.primesoft.asyncworldedit.api.IPhysicsWatch;
+import org.primesoft.asyncworldedit.api.IPlotMeFix;
+import org.primesoft.asyncworldedit.api.blockPlacer.IBlockPlacer;
+import org.primesoft.asyncworldedit.api.playerManager.IPlayerManager;
+import org.primesoft.asyncworldedit.api.progressDisplay.IProgressDisplay;
+import org.primesoft.asyncworldedit.api.taskdispatcher.ITaskDispatcher;
+import org.primesoft.asyncworldedit.injector.InjectorBukkit;
 
 public class Stability extends JavaPlugin
 {
@@ -16,6 +26,10 @@ public class Stability extends JavaPlugin
 	private Dispatcher disp;
 	private Sampler sampler;
 	private static boolean verbose;
+	private static Stability instance;
+	
+	private AsyncWorldEditMain awem;
+	private InjectorBukkit awei;
 
 	public void onEnable()
 	{
@@ -30,6 +44,13 @@ public class Stability extends JavaPlugin
 		this.log("Enabling Stability by cyberpwn");
 		this.sampler.start();
 		this.verbose("Invoked Start for Sampler");
+		instance = this;
+		this.log("Starting AWE");
+		this.verbose("=======================================");
+		awei = new InjectorBukkit(this);
+		this.verbose("=======================================");
+		awem = new AsyncWorldEditMain(this);
+		this.verbose("=======================================");
 	}
 
 	public void onDisable()
@@ -44,7 +65,7 @@ public class Stability extends JavaPlugin
 	{
 		if(!cmd.getName().equalsIgnoreCase("stability"))
 		{
-			return false;
+			awem.onCommand(sender, cmd, label, args);
 		}
 
 		if(args.length == 0)
@@ -266,5 +287,50 @@ public class Stability extends JavaPlugin
 	public Dispatcher getDisbatcher()
 	{
 		return this.disp;
+	}
+	
+	public static Stability getInstance()
+	{
+		return instance;
+	}
+
+	public IProgressDisplay getProgressDisplayManager()
+	{
+		return awem.getProgressDisplayManager();
+	}
+
+	public IPhysicsWatch getPhysicsWatcher()
+	{
+		return awem.getPhysicsWatcher();
+	}
+
+	public IBlockPlacer getBlockPlacer()
+	{
+		return awem.getBlockPlacer();
+	}
+
+	public IPlayerManager getPlayerManager()
+	{
+		return awem.getPlayerManager();
+	}
+
+	public ChunkWatch getChunkWatch()
+	{
+		return awem.getChunkWatch();
+	}
+
+	public ITaskDispatcher getTaskDispatcher()
+	{
+		return awem.getTaskDispatcher();
+	}
+
+	public IPlotMeFix getPlotMeFix()
+	{
+		return awem.getPlotMeFix();
+	}
+
+	public BlocksHubIntegration getBlocksHub()
+	{
+		return awem.getBlocksHub();
 	}
 }

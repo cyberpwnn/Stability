@@ -1,8 +1,13 @@
 main: com.ulticraft.stability.Stability
 name: Stability
-start: POSTWORLD
 version: 1.5.3
+softdepend: [WorldEdit]
+loadbefore: [WorldEdit]
 commands:
   stability:
     aliases: st
     description: Base Stability Command
+  awe:
+    description: 'Displays the help for Async world edit.'
+    usage: /<command>
+    aliases: /awe
