@@ -39,9 +39,12 @@ public class Sampler implements Listener
 	private int clockGen;
 	private int clockAct;
 	private int clockSecond;
+	private int clock20;
 	private int clockDispatch;
 	private int redstones;
-	
+	private ActionHistory history;
+	private TimeManager tm;
+
 	private long sampled;
 	private long tavgtps;
 	private long tavgram;
@@ -50,12 +53,14 @@ public class Sampler implements Listener
 	private long tavgplr;
 	private long tavglagpct;
 	private long sampleLag;
-	
+
 	public Sampler(final Stability plugin, final int sampleInterval, final int sampleCount)
 	{
 		plugin.getServer().getPluginManager().registerEvents((Listener) this, (Plugin) plugin);
 		this.scheduler = plugin.getServer().getScheduler();
-		this.ana = new Analyzer(new ActionController(plugin), plugin.getConfiguration());
+		this.history = new ActionHistory();
+		this.tm = new TimeManager();
+		this.ana = new Analyzer(new ActionController(plugin), plugin.getConfiguration(), history);
 		this.lastAction = "";
 		this.pr = new Prediction(plugin);
 		this.lastActed = 0;
@@ -73,7 +78,8 @@ public class Sampler implements Listener
 		this.clockSecond = 0;
 		this.redstones = 0;
 		this.clockDispatch = 0;
-		
+		this.clock20 = 0;
+
 		this.sampled = 0l;
 		this.tavgtps = 0l;
 		this.tavgram = 0l;
@@ -82,7 +88,7 @@ public class Sampler implements Listener
 		this.tavgplr = 0l;
 		this.tavglagpct = 0l;
 		this.sampleLag = 0l;
-		
+
 		this.scheduler.scheduleSyncRepeatingTask((Plugin) plugin, (Runnable) new TPSSample(), 20L, 1L);
 	}
 
@@ -95,7 +101,7 @@ public class Sampler implements Listener
 			{
 				pl.getDisbatcher().notifyLag();
 			}
-			
+
 			if(act != "")
 			{
 				this.lastAction = act;
@@ -110,18 +116,27 @@ public class Sampler implements Listener
 					this.lastActed = 0;
 				}
 			}
-			
+
 			clockAct = 0;
 		}
-		
+
+		if(clock20 >= 20)
+		{
+			clock20 = 0;
+
+			history.update();
+			tm.update();
+		}
+
 		pr.addSample(sampleData);
-		
+
 		clockAct++;
+		clock20++;
 
 		setCurrentSample(sampleData);
-		
+
 		clockDispatch++;
-		
+
 		if(pl.getDisbatcher().getMonitors().size() > pl.getConfiguration().getDispatchThreshold())
 		{
 			if(clockDispatch >= pl.getConfiguration().getDispatchThresholdTick())
@@ -130,7 +145,7 @@ public class Sampler implements Listener
 				clockDispatch = 0;
 			}
 		}
-		
+
 		else
 		{
 			if(clockDispatch >= pl.getConfiguration().getDispatchTick())
@@ -139,7 +154,7 @@ public class Sampler implements Listener
 				clockDispatch = 0;
 			}
 		}
-		
+
 		if(presampling)
 		{
 			msgIncrement++;
@@ -171,7 +186,7 @@ public class Sampler implements Listener
 				}
 			}
 		}
-		
+
 		if(sampled > 1000)
 		{
 			sampled = 0;
@@ -180,15 +195,16 @@ public class Sampler implements Listener
 			tavgchkdbl = 0;
 			tavgplr = 0;
 			tavgram = 0;
+			tavglagpct = 0;
 		}
-		
+
 		sampled++;
 		tavgtps += sampleData.getTps();
 		tavgchkld += sampleData.getGenerations();
 		tavgchkdbl += sampleData.getChunksLoaded();
 		tavgplr += sampleData.getPlayersOnline();
 		tavgram += sampleData.getFreeMemory();
-		
+
 		if(getAnalyzer().getLag() > 0)
 		{
 			tavglagpct++;
@@ -197,14 +213,14 @@ public class Sampler implements Listener
 
 	public void start()
 	{
-		this.ana = new Analyzer(new ActionController(this.pl), this.pl.getConfiguration());
+		this.ana = new Analyzer(new ActionController(this.pl), this.pl.getConfiguration(), history);
 		this.taskId = this.scheduler.scheduleSyncRepeatingTask((Plugin) this.pl, (Runnable) new Runnable()
 		{
 			@Override
 			public void run()
 			{
 				stm.trace();
-				
+
 				double freeMemory = Runtime.getRuntime().maxMemory() - Runtime.getRuntime().totalMemory() + Runtime.getRuntime().freeMemory();
 				double maxMemory = Runtime.getRuntime().maxMemory();
 				long upTime = ManagementFactory.getRuntimeMXBean().getUptime();
@@ -229,7 +245,7 @@ public class Sampler implements Listener
 							{
 								++livingEntities;
 							}
-							
+
 							else if(k.getType().equals((Object) EntityType.DROPPED_ITEM))
 							{
 								++dropEntities;
@@ -237,43 +253,43 @@ public class Sampler implements Listener
 						}
 					}
 				}
-				
+
 				if(generations > 0 && clockGen > 5)
-				{					
+				{
 					generations = (int) generations / 2;
 					clockGen = 0;
 				}
-				
+
 				clockGen++;
-				
+
 				mapSample++;
-				
+
 				clockSecond++;
-				
+
 				int rms = 0;
-				
+
 				if(!sampleArray.getSamples().isEmpty())
-				{					
+				{
 					for(Sample i : sampleArray.getSamples())
 					{
 						rms += i.getRedstoneClocks();
 					}
-					
+
 					rms /= sampleArray.getSamples().size();
 				}
-				
-				sample(new Sample(TPSSample.getTPS(pl.getConfiguration().getTpsSoftness()), freeMemory, maxMemory, chunksLoaded, playersOnline, totalEntities, livingEntities, dropEntities, generations, (rms+redstones)/2, upTime));
-				
+
+				sample(new Sample(TPSSample.getTPS(pl.getConfiguration().getTpsSoftness()), freeMemory, maxMemory, chunksLoaded, playersOnline, totalEntities, livingEntities, dropEntities, generations, (rms + redstones) / 2, upTime));
+
 				if(clockSecond == 2)
 				{
 					clockSecond = 0;
 					redstones = 0;
 				}
-				
+
 				if(mapSample > 40)
 				{
 					mapSample = 0;
-					
+
 					if(pl.getConfiguration().isMapsEnabled())
 					{
 						sampleArray.addSample(currentSample);
@@ -283,27 +299,32 @@ public class Sampler implements Listener
 			}
 		}, 40L, sampleInterval);
 	}
-	
+
 	public void informPlayer(CommandSender sender)
 	{
 		DecimalFormat df = new DecimalFormat("#.#");
-		
-		double lagPCT = 100 * ((double)tavglagpct/(double)sampled);
-		
+
+		double lagPCT = 100 * ((double) tavglagpct / (double) sampled);
+
 		ArrayList<String> suggs = pr.getSuggestions();
-		
+
 		sender.sendMessage(ChatColor.DARK_GRAY + "[==============================================]");
-		
-		sender.sendMessage(Final.TAG_STABILITY + ChatColor.AQUA + "SAMPLES: " + sampled + " LAG: " + df.format(lagPCT) + "%");
-		sender.sendMessage(Final.TAG_STABILITY + ChatColor.GREEN + "TPS: " + df.format((double)tavgtps/(double)sampled) + " RAM: " + df.format((tavgram/sampled)/1024/1024));
-		sender.sendMessage(Final.TAG_STABILITY + ChatColor.YELLOW + "PLR: " + df.format((double)tavgplr/(double)sampled) + " CHUNKS: "+ df.format(tavgchkdbl/sampled));
-		sender.sendMessage(Final.TAG_STABILITY + ChatColor.GOLD + "ACTUAL PLAYERLIMIT: " + pr.getMaxPlayers());
+		sender.sendMessage(Final.TAG_STABILITY + ChatColor.AQUA + "SAMPLES: " + sampleArray.getSamples().size() + "(" + sampled + ") LAG: " + df.format(lagPCT) + "%");
+
 		sender.sendMessage(ChatColor.DARK_GRAY + "[==============================================]");
 		for(String i : suggs)
 		{
 			sender.sendMessage(Final.TAG_STABILITY + ChatColor.RED + i);
 		}
 		sender.sendMessage(ChatColor.DARK_GRAY + "[==============================================]");
+	}
+
+	public void sendHistory(CommandSender sender)
+	{
+		for(String i : history.export())
+		{
+			sender.sendMessage(i);
+		}
 	}
 
 	public void stop()
@@ -325,12 +346,12 @@ public class Sampler implements Listener
 	{
 		return sampleCount;
 	}
-	
+
 	public Analyzer getAnalyzer()
 	{
 		return ana;
 	}
-	
+
 	public long getSampleInterval()
 	{
 		return sampleInterval;
@@ -445,10 +466,20 @@ public class Sampler implements Listener
 	{
 		return sampleLag;
 	}
-	
+
 	public StackTraceMonitor getStackTraceMonitor()
 	{
 		return stm;
+	}
+
+	public ActionHistory getActionHistory()
+	{
+		return history;
+	}
+	
+	public TimeManager getTimeManager()
+	{
+		return tm;
 	}
 
 	@EventHandler
@@ -456,7 +487,7 @@ public class Sampler implements Listener
 	{
 		generations++;
 	}
-	
+
 	@EventHandler
 	public void onRedstone(BlockRedstoneEvent e)
 	{

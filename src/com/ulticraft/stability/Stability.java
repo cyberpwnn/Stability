@@ -53,12 +53,12 @@ public class Stability extends JavaPlugin
 			{
 				this.disp.showHelp(sender);
 			}
-			
+
 			else
 			{
 				sender.sendMessage(String.valueOf(Final.TAG_STABILITY) + ChatColor.RED + "You do not have permission to use Stability!");
 			}
-			
+
 			return true;
 		}
 
@@ -81,10 +81,10 @@ public class Stability extends JavaPlugin
 			{
 				sender.sendMessage("Monitoring is for in-game use only!");
 			}
-			
+
 			return true;
 		}
-		
+
 		if(args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rel"))
 		{
 			if(sender.hasPermission("stability.reload"))
@@ -96,15 +96,15 @@ public class Stability extends JavaPlugin
 				this.sampler.start();
 				sender.sendMessage(String.valueOf(Final.TAG_STABILITY) + ChatColor.GREEN + "Reloaded Config & Restarted Sampler");
 			}
-			
+
 			else
 			{
 				sender.sendMessage(String.valueOf(Final.TAG_STABILITY) + ChatColor.RED + "You do not have permission to reload!");
 			}
-			
+
 			return true;
 		}
-		
+
 		if(args[0].equalsIgnoreCase("stacktrace") || args[0].equalsIgnoreCase("stackt"))
 		{
 			if(args.length == 2)
@@ -114,30 +114,30 @@ public class Stability extends JavaPlugin
 					long ticks = Long.parseLong(args[1]);
 					getSampler().getStackTraceMonitor().startTrace(ticks, (Player) sender);
 				}
-				
+
 				else
 				{
 					sender.sendMessage("Monitoring is for in-game use only!");
 				}
-				
+
 				return true;
 			}
-			
+
 			else
 			{
 				sender.sendMessage(ChatColor.RED + "/st stacktrace <TICKS>");
 			}
-			
+
 			return true;
 		}
-		
+
 		if(args[0].equalsIgnoreCase("action") || args[0].equalsIgnoreCase("act"))
 		{
 			if(!sender.hasPermission("stability.action"))
 			{
 				sender.sendMessage(String.valueOf(Final.TAG_STABILITY) + ChatColor.RED + "Sorry, you cannot use stabilization invocations!");
 			}
-			
+
 			if(args.length > 1)
 			{
 				final ActionController ac = new ActionController(this);
@@ -147,7 +147,7 @@ public class Stability extends JavaPlugin
 					sender.sendMessage(String.valueOf(Final.TAG_STABILITY) + ChatColor.GREEN + "Requested to Purge Chunks");
 					getDisbatcher().notifyPlayers("Purge Chunks", sender.getName());
 				}
-				
+
 				else if(args[1].equalsIgnoreCase("cullmobs") || args[1].equalsIgnoreCase("cm"))
 				{
 					if(args.length == 3)
@@ -164,7 +164,7 @@ public class Stability extends JavaPlugin
 					{
 						if(sender instanceof Player)
 						{
-							Chunk cm = ((Player)sender).getLocation().getChunk();
+							Chunk cm = ((Player) sender).getLocation().getChunk();
 							int[] culled = ac.cullMobSingleChunk(((Player) sender).getLocation().getChunk(), config.getMobThresholdCull(), config.getMobPeacefulThresholdCull(), config.getMobHostileThresholdCull());
 							sender.sendMessage(String.valueOf(Final.TAG_STABILITY) + ChatColor.GREEN + "Culled " + ChatColor.YELLOW + (culled[0] + culled[1]) + ChatColor.GREEN + " mobs! In your Chunk!" + ChatColor.LIGHT_PURPLE + " (H: " + culled[0] + " P: " + culled[1] + ")");
 							getDisbatcher().notifyPlayers("Cull Mobs in CHUNK[" + cm.getX() + ", " + cm.getZ() + "]", sender.getName());
@@ -183,7 +183,7 @@ public class Stability extends JavaPlugin
 					sender.sendMessage(String.valueOf(Final.TAG_STABILITY) + ChatColor.GREEN + "Requesting Garbage Collecter");
 					getDisbatcher().notifyPlayers("Collect Garbage", sender.getName());
 				}
-				
+
 				else if(args[1].equalsIgnoreCase("breakclocks") || args[1].equalsIgnoreCase("bc"))
 				{
 					if(config.canBreakClocks())
@@ -192,7 +192,7 @@ public class Stability extends JavaPlugin
 						sender.sendMessage(String.valueOf(Final.TAG_STABILITY) + ChatColor.GREEN + "Requesting to Break Clocks");
 						getDisbatcher().notifyPlayers("Break Clocks", sender.getName());
 					}
-					
+
 					else
 					{
 						sender.sendMessage(ChatColor.RED + "This action has been disabled!");
@@ -227,24 +227,42 @@ public class Stability extends JavaPlugin
 				sender.sendMessage(String.valueOf(Final.TAG_STABILITY) + ChatColor.RED + "You do not have permission to view actions!");
 			}
 		}
-		
+
 		else if(args[0].equalsIgnoreCase("status") || args[0].equalsIgnoreCase("st"))
 		{
 			if(sender.hasPermission("stability.info"))
 			{
 				sampler.informPlayer(sender);
+				return true;
 			}
-			
+
 			else
 			{
-				sender.sendMessage(String.valueOf(Final.TAG_STABILITY) + ChatColor.RED + "You do not have permission to view actions!");
+				sender.sendMessage(String.valueOf(Final.TAG_STABILITY) + ChatColor.RED + "You do not have permission to view stats!");
+				return true;
 			}
 		}
-		
+
+		else if(args[0].equalsIgnoreCase("history") || args[0].equalsIgnoreCase("hist"))
+		{
+			if(sender.hasPermission("stability.info"))
+			{
+				sampler.sendHistory(sender);
+				return true;
+			}
+
+			else
+			{
+				sender.sendMessage(String.valueOf(Final.TAG_STABILITY) + ChatColor.RED + "You do not have permission to view history!");
+				return true;
+			}
+		}
+
 		else
 		{
 			sender.sendMessage(String.valueOf(Final.TAG_STABILITY) + ChatColor.RED + "Unknow Parameter, use /st for help!");
 		}
+
 		return true;
 	}
 

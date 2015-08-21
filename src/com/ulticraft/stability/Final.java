@@ -33,7 +33,7 @@ public class Final
 	public static final String ALG_FEATURE_STACKTT_ENABLE = "algorithm.feature.stack-trace-tracer.enable";
 	public static final String ALG_FEATURE_STACKTT_MAX_TICK = "algorithm.feature.stack-trace-tracer.max-tick-trace";
 	public static final String ALG_RESPRED_ = "";
-	public static final String PLUGIN_VERSION = "1.5.4";
+	public static final String PLUGIN_VERSION = "1.5.5";
 	public static final String PERM_MONITOR = "stability.monitor";
 	public static final String PERM_ACTION = "stability.action";
 	public static final String PERM_RELOAD = "stability.reload";
@@ -51,6 +51,7 @@ public class Final
 			ChatColor.AQUA + "Stability v" + PLUGIN_VERSION + " created by " + ChatColor.GREEN + "cyberpwn", 
 			ChatColor.GREEN + "/st monitor" + ChatColor.YELLOW + " - Server Diagnostics with Title Messages",
 			ChatColor.GREEN + "/st status" + ChatColor.YELLOW + " - Stability Instance Information",
+			ChatColor.GREEN + "/st history" + ChatColor.YELLOW + " - See who did what & when, via SPAM!.",
 			ChatColor.GREEN + "/st reload" + ChatColor.YELLOW + " - Reload Configuration & Restart Sampler", 
 			ChatColor.GREEN + "/st actions" + ChatColor.YELLOW + " - Invoke Stabilization To clean the runtime",
 			ChatColor.YELLOW + "/st stacktrace <ticks>" + ChatColor.RED + " - Traces ALL CODE ACTIONS"
