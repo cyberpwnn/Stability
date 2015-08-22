@@ -17,5 +17,8 @@ Commands and permissions are located on the wiki also!
 
 # Downloads
 [RELEASE v1.5.4](https://github.com/danielmills/Stability/blob/master/build/latest/release/Stability.jar?raw=true)
+<<<<<<< HEAD
 
 [BLOOD CLOTTING EDGE v1.5.5] (https://github.com/danielmills/Stability/blob/master/build/latest/bleeding/Stability.jar?raw=true)
+=======
+>>>>>>> origin/master
