@@ -88,7 +88,7 @@ public class Sampler implements Listener
 		this.tavgplr = 0l;
 		this.tavglagpct = 0l;
 		this.sampleLag = 0l;
-
+		
 		this.scheduler.scheduleSyncRepeatingTask((Plugin) plugin, (Runnable) new TPSSample(), 20L, 1L);
 	}
 
@@ -309,14 +309,20 @@ public class Sampler implements Listener
 		ArrayList<String> suggs = pr.getSuggestions();
 
 		sender.sendMessage(ChatColor.DARK_GRAY + "[==============================================]");
-		sender.sendMessage(Final.TAG_STABILITY + ChatColor.AQUA + "SAMPLES: " + sampleArray.getSamples().size() + "(" + sampled + ") LAG: " + df.format(lagPCT) + "%");
-
+		sender.sendMessage(Final.TAG_STABILITY + ChatColor.AQUA + "SAMPLES: " + sampleArray.getSamples().size() + "(" + sampled + ") " + ChatColor.GREEN + "LAG: " + df.format(lagPCT) + "%");
+		sender.sendMessage(Final.TAG_STABILITY + ChatColor.GOLD + "UPTIME: " + tm.formatTime() + ChatColor.RED + " STABILITY: " + pr.getStabilityScore());
+		
 		sender.sendMessage(ChatColor.DARK_GRAY + "[==============================================]");
-		for(String i : suggs)
+		
+		if(suggs.size() > 0)
 		{
-			sender.sendMessage(Final.TAG_STABILITY + ChatColor.RED + i);
+			//sender.sendMessage(Final.TAG_STABILITY + "");
+			for(String i : suggs)
+			{
+				sender.sendMessage(Final.TAG_STABILITY + i);
+			}
+			sender.sendMessage(ChatColor.DARK_GRAY + "[==============================================]");
 		}
-		sender.sendMessage(ChatColor.DARK_GRAY + "[==============================================]");
 	}
 
 	public void sendHistory(CommandSender sender)

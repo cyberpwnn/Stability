@@ -2,6 +2,7 @@ package com.ulticraft.stability;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import org.bukkit.ChatColor;
 
 public class Prediction
 {
@@ -9,6 +10,7 @@ public class Prediction
 	private HashMap<Integer, ArrayList<Double>> tpsCross;
 	private HashMap<Integer, Double> tpsAvg;
 	private Stability pl;
+	private String score;
 	
 	private String maxpl;
 	
@@ -17,7 +19,13 @@ public class Prediction
 		tpsCross = new HashMap<Integer, ArrayList<Double>>();
 		tpsAvg = new HashMap<Integer, Double>();
 		suggestions = new ArrayList<String>();
+		score = "0%";
 		this.pl = pl;
+	}
+	
+	public String getStabilityScore()
+	{
+		return score;
 	}
 	
 	public void addSample(Sample sample)
@@ -75,7 +83,7 @@ public class Prediction
 					break;
 				}
 				
-				suggestions.add("Your max-players without lag is " + i + "/" + pl.getServer().getMaxPlayers());
+				suggestions.add(ChatColor.YELLOW + "Your max-players without lag is " + i + "/" + pl.getServer().getMaxPlayers());
 				maxpl = i + "/" + pl.getServer().getMaxPlayers();
 				break;
 			}
@@ -93,31 +101,51 @@ public class Prediction
 		avgRam /= pl.getSampler().getSampleArray().getSamples().size();
 		avgRed /= pl.getSampler().getSampleArray().getSamples().size();
 		
+		int sk = 100;
+		
 		if(avgRam / 1024.0 / 1024.0 / (Runtime.getRuntime().maxMemory() / 1024L / 1024L) > 0.22 && avgRam / 1024.0 / 1024.0 / (Runtime.getRuntime().maxMemory() / 1024L / 1024L) < 0.34)
 		{
-			suggestions.add("Your server only has one third of RAM free.");
+			suggestions.add(ChatColor.RED + "Your server only has one third of RAM free.");
+			sk -= 12;
 		}
 		
 		else if(avgRam / 1024.0 / 1024.0 / (Runtime.getRuntime().maxMemory() / 1024L / 1024L) < 0.21 && avgRam / 1024.0 / 1024.0 / (Runtime.getRuntime().maxMemory() / 1024L / 1024L) > 0.12)
 		{
-			suggestions.add("Your server only has one fifth of RAM free.");
+			suggestions.add(ChatColor.DARK_RED + "Your server only has one fifth of RAM free.");
+			sk -= 32;
 		}
 		
 		else if(avgRam / 1024.0 / 1024.0 / (Runtime.getRuntime().maxMemory() / 1024L / 1024L) < 0.11)
 		{
-			suggestions.add("Your server is at risk of OOME's & Data Failure.");
+			suggestions.add(ChatColor.BOLD + "" + ChatColor.DARK_RED + "Your server is at risk of OOME's & Data Failure.");
+			sk -= 62;
 		}
 		
 		if(avgRed > pl.getConfiguration().getMaxRedstoneUpdates())
 		{
 			int times = (int) (avgRed / pl.getConfiguration().getMaxRedstoneUpdates());
-			suggestions.add("Redstone updates are " + times + " times as much, for your threshold.");
+			suggestions.add(ChatColor.YELLOW + "Redstone updates are " + times + " times as much, for your threshold.");
+			sk -= 7;
 		}
 		
 		if(pl.getSampler().getTimeManager().getSecondsAlive() > (24*60*60))
 		{
-			suggestions.add("Server Runtime Stale. Have periodic reboots to stabilize.");
+			suggestions.add(ChatColor.RED + "Server Runtime Stale. Have periodic reboots to stabilize.");
+			sk -= 25;
 		}
+		
+		if(pl.getSampler().getAnalyzer().getLag() > 30)
+		{
+			suggestions.add(ChatColor.BOLD + "" + ChatColor.DARK_RED + "Your server has been lagging for over 1 minute");
+			sk = 0;
+		}
+		
+		if(sk < 0)
+		{
+			sk = 0;
+		}
+		
+		score = sk + "%";
 		
 		return suggestions;
 	}
