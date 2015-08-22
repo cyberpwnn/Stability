@@ -16,13 +16,7 @@ An important part of making stability work for your server, is the configuration
 Commands and permissions are located on the wiki also!
 
 # Downloads
-<<<<<<< HEAD
 [RELEASE v1.5.5](https://github.com/danielmills/Stability/blob/master/build/latest/release/Stability.jar?raw=true)
-=======
-[RELEASE v1.5.4](https://github.com/danielmills/Stability/blob/master/build/latest/release/Stability.jar?raw=true)
-
-[BLOOD CLOTTING EDGE v1.5.5] (https://github.com/danielmills/Stability/blob/master/build/latest/bleeding/Stability.jar?raw=true)
->>>>>>> origin/master
 
 ## Changelog
 
