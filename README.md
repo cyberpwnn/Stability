@@ -17,8 +17,13 @@ Commands and permissions are located on the wiki also!
 
 # Downloads
 [RELEASE v1.5.4](https://github.com/danielmills/Stability/blob/master/build/latest/release/Stability.jar?raw=true)
-<<<<<<< HEAD
-
 [BLOOD CLOTTING EDGE v1.5.5] (https://github.com/danielmills/Stability/blob/master/build/latest/bleeding/Stability.jar?raw=true)
-=======
->>>>>>> origin/master
+
+# Changelog
+
+## Stability 1.5.5
+Stability 1.5.5 adds several new and updated features plus some bug fixes!
+* Fixed the Status screen (/st status) To display information such as your stability percentage
+* Analyses sample data and determines suggestions and issues with your server on the /st status page
+* View the history of actions by stability with /st history. Displayed such as CHUNK PURGE: 9 Minutes ago.
+* More to come... It isnt done and is highly unrecomended you actually use it.
