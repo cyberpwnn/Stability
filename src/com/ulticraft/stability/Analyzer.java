@@ -77,11 +77,16 @@ public class Analyzer
 
 		if(needsChunkGC)
 		{
+			if(sample.getChunksLoaded() < 600)
+			{
+				return "";
+			}
+			
 			ac.syncPurge();
 			action = ChatColor.RED + "Releasing Chunks";
 
 			acted += 2;
-
+			
 			ah.act(ChatColor.RED + "CHUNK-PURGE");
 
 			needsGC = true;

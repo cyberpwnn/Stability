@@ -18,7 +18,7 @@ public class TimeManager
 
 	public long getSecondsAlive()
 	{
-		return secondsAlive;
+		return secondsAlive/1000;
 	}
 
 	public String formatTime()

@@ -171,8 +171,10 @@ public class StackTraceMonitor implements Listener
 		{
 			for(Player i : st.getServer().getOnlinePlayers())
 			{
-				i.sendMessage(Final.TAG_STABILITY + ChatColor.UNDERLINE + "" + ChatColor.RED + tracingPlayer.getName() + " started a Stack Trace. EXPECT LAG for " + durationTicks / 20 + " seconds");
+				i.sendMessage(Final.TAG_STABILITY + "" + ChatColor.RED + ChatColor.UNDERLINE + "PROFILING for " + durationTicks / 20 + " seconds. EXPECT LAG!");
 			}
+			
+			st.getSampler().getActionHistory().act(player.getName() + " started stacktrace for " + durationTicks/20 + "s");
 
 			tracingPlayer = player;
 			player.sendMessage(ChatColor.DARK_PURPLE + "Started Tracing...");
