@@ -16,18 +16,21 @@ An important part of making stability work for your server, is the configuration
 Commands and permissions are located on the wiki also!
 
 # Downloads
-[RELEASE v1.5.5](https://github.com/danielmills/Stability/blob/master/build/latest/release/Stability.jar?raw=true)
+[RELEASE v1.5.5.1](https://github.com/danielmills/Stability/blob/master/build/latest/release/Stability.jar?raw=true)
 
 ## Changelog
+
+### Stability 1.5.5.1
+Stability 1.5.5.1 Fixes chunks from being unloaded even further if it isnt effective.
+* If the previous chunk unload operation did not unload more than 256 chunks, prevent then next.
+* A cooldown will be thrown for about half a minute preventing stability from trying again.
+* Prevents chunks from being unladed unless they are above 600, (default world + a bit more)
 
 ### Stability 1.5.5
 Stability 1.5.5 adds several new and updated features plus some bug fixes!
 * Fixed the Status screen (/st status) To display information such as your stability percentage
 * Analyses sample data and determines suggestions and issues with your server on the /st status page
 * View the history of actions by stability with /st history. Displayed such as CHUNK PURGE: 9 Minutes ago.
-<<<<<<< HEAD
 * Calculates the servers stability. How stable it is. Its not exactly mathematically calculated.
 * Performance optimizations for chunks & dealing with instabilities.
-=======
 * More to come... It isnt done and is highly unrecomended you actually use it.
->>>>>>> origin/master
