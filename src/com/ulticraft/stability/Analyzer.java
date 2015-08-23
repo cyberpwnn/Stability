@@ -21,6 +21,9 @@ public class Analyzer
 	private boolean clockScanning;
 	private int acted;
 	private ActionHistory ah;
+	private int chunkChange;
+	private int chunkState;
+	private boolean didChunk;
 
 	public Analyzer(ActionController ac, ConfigurationFile config, ActionHistory ah)
 	{
@@ -37,6 +40,9 @@ public class Analyzer
 		this.removed = new HashMap<Location, Material>();
 		this.acted = 30;
 		this.ah = ah;
+		this.chunkChange = 0;
+		this.didChunk = false;
+		this.chunkState = 0;
 	}
 
 	public String analyze(Sample sample, SampleArray sampleArray)
@@ -82,8 +88,28 @@ public class Analyzer
 				return "";
 			}
 			
+			if(chunkChange > 0)
+			{
+				chunkChange--;
+				return "";
+			}
+			
+			if(didChunk)
+			{
+				didChunk = false;
+				if(sample.getChunksLoaded() - chunkState < 256)
+				{
+					chunkChange = 32;
+					chunkState = 0;
+					return ChatColor.RED + "Prevented ICR";
+				}
+			}
+			
+			chunkState = sample.getChunksLoaded();
+			
 			ac.syncPurge();
 			action = ChatColor.RED + "Releasing Chunks";
+			didChunk = true;
 
 			acted += 2;
 			

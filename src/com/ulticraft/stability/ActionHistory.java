@@ -24,6 +24,11 @@ public class ActionHistory
 	public void act(String action)
 	{
 		actions.add(new History(action));
+		
+		if(actions.size() > 24)
+		{
+			actions.remove(0);
+		}
 	}
 
 	public ArrayList<String> export()
