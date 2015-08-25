@@ -24,7 +24,7 @@ public class Analyzer
 	private int chunkChange;
 	private int chunkState;
 	private boolean didChunk;
-
+	
 	public Analyzer(ActionController ac, ConfigurationFile config, ActionHistory ah)
 	{
 		this.ac = ac;
@@ -48,7 +48,7 @@ public class Analyzer
 	public String analyze(Sample sample, SampleArray sampleArray)
 	{
 		acted--;
-
+		
 		String action = "";
 		if(sample.getFreeMemory() / 1024.0 / 1024.0 / (Runtime.getRuntime().maxMemory() / 1024L / 1024L) < this.config.getThresholdMem())
 		{
@@ -200,6 +200,8 @@ public class Analyzer
 				removed = new HashMap<Location, Material>();
 			}
 		}
+		
+		//int c = ac.cullEntities(config.getMaxEntitiesChunk());
 
 		if(needsCulling || needsChunkGC || needsGC)
 		{
@@ -210,7 +212,7 @@ public class Analyzer
 		{
 			lagging = 0;
 		}
-
+		
 		return action;
 	}
 
@@ -237,6 +239,11 @@ public class Analyzer
 	public void requestUnclock()
 	{
 		needsRedstoneClock = true;
+	}
+	
+	public ActionController getActionController()
+	{
+		return ac;
 	}
 
 	public void onRedstone(BlockRedstoneEvent e)

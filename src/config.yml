@@ -18,6 +18,7 @@ algorithm:
       max-updates-per-rtick: 64
       action-break-clocks: true
     cull:
+      entities-per-chunk: 16
       adaptive:
         enable: true
         mobs-per-chunk: 35

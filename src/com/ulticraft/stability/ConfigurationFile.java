@@ -36,6 +36,7 @@ public class ConfigurationFile
 	private int dispatchThresholdTick;
 	private boolean enableStackTracer;
 	private int maxTraceTick;
+	private int maxEntityChunk;
 	
 	private String schema;
 	private File configurationFile;
@@ -122,6 +123,7 @@ public class ConfigurationFile
 		this.dispatchThresholdTick = fc.getInt(Final.ALG_FEATURE_DISP_SUPPRESSION_DISP_TICK);
 		this.enableStackTracer = fc.getBoolean(Final.ALG_FEATURE_STACKTT_ENABLE);
 		this.maxTraceTick = fc.getInt(Final.ALG_FEATURE_STACKTT_MAX_TICK);
+		this.maxEntityChunk = fc.getInt(Final.ALG_THRESH_MAX_ENTITIES_CHUNK);
 				
 		boolean invalid = false;
 		
@@ -361,5 +363,10 @@ public class ConfigurationFile
 	public int getMaxTraceTick()
 	{
 		return maxTraceTick;
+	}
+	
+	public int getMaxEntitiesChunk()
+	{
+		return maxEntityChunk;
 	}
 }

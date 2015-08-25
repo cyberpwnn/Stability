@@ -13,6 +13,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockRedstoneEvent;
+import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -316,7 +317,6 @@ public class Sampler implements Listener
 		
 		if(suggs.size() > 0)
 		{
-			//sender.sendMessage(Final.TAG_STABILITY + "");
 			for(String i : suggs)
 			{
 				sender.sendMessage(Final.TAG_STABILITY + i);

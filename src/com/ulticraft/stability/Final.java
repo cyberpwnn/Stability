@@ -11,6 +11,7 @@ public class Final
 	public static final String ALG_THRESH_TPS = "algorithm.threshold.ticks-per-second";
 	public static final String ALG_THRESH_MEM = "algorithm.threshold.memory-percent";
 	public static final String ALG_THRESH_SUPRESS_MOBS = "algorithm.threshold.supress.mobs-per-chunk";
+	public static final String ALG_THRESH_MAX_ENTITIES_CHUNK = "algorithm.threshold.cull.entities-per-chunk";
 	public static final String ALG_THRESH_CULL_ENABLE = "algorithm.threshold.cull.adaptive.enable";
 	public static final String ALG_THRESH_CULL_MOBS = "algorithm.threshold.cull.adaptive.mobs-per-chunk";
 	public static final String ALG_THRESH_CULL_MOBS_HOSTILE = "algorithm.threshold.cull.adaptive.mobs-hostile-per-chunk";

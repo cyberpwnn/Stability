@@ -73,6 +73,69 @@ public class ActionController implements Listener
 			}
 		}, 1, 1);
 	}
+	
+	public boolean isPlayersOnline()
+	{
+		return !pl.getServer().getOnlinePlayers().isEmpty();
+	}
+	
+	public int getPlayerCount()
+	{
+		return pl.getServer().getOnlinePlayers().size();
+	}
+	
+	public int cullEntities(int epc)
+	{
+		int purged = 0;
+		
+		for(World i : pl.getServer().getWorlds())
+		{
+			for(Chunk j : i.getLoadedChunks())
+			{
+				int thresh = 0;
+				
+				for(Entity k : j.getEntities())
+				{
+					if(!k.getType().equals(EntityType.MINECART) || !k.getType().equals(EntityType.ARROW) || !k.getType().equals(EntityType.ARMOR_STAND))
+					{
+						continue;
+					}
+					
+					if(thresh >= epc)
+					{
+						k.remove();
+						purged++;
+					}
+					
+					thresh++;
+				}
+			}
+		}
+		
+		return purged;
+	}
+	
+	public boolean shouldSpawn(Chunk c, int epc)
+	{
+		int thresh = 0;
+			
+		for(Entity k : c.getEntities())
+		{
+			if(!k.getType().equals(EntityType.MINECART) || !k.getType().equals(EntityType.ARROW) || !k.getType().equals(EntityType.ARMOR_STAND))
+			{
+				continue;
+			}
+			
+			if(thresh >= epc)
+			{
+				return false;
+			}
+			
+			thresh++;
+		}
+		
+		return true;
+	}
 
 	public int softPurgeChunks()
 	{
