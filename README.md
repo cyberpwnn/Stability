@@ -7,7 +7,7 @@ Stability to the minecraft servers! Stability uses samples to analyze what is go
 Stability allows you to tap into it's sampling very esily, and clearly. Simply use /stability monitor (/st mon). You will see a live updating title message, and given a map with live charting for TPS RAM and CHUNKS.
 
 ## Actions
-Sometimes, there may be some resource fighting, which stability cannot detect. In this case, we have actions. They allow you to request stability clear unused chunks, or remove redstone clocks. Actions are very important, simply because stability is advanced, leaving many analytical pitfalls.
+Sometimes, there may be some resource fighting, which stability cannot detect. In this case, we have actions. They allow you to request stability clear unused chunks, or remove redstone clocks. Actions are very important, simply because stability is advanced, leaving many analytical pitfalls. You can also stack trace the server.
 
 ## Configuration
 An important part of making stability work for your server, is the configuration. Not every server is the same, nor is it backed with the same processor (or array of them!). This means that "lag" is a different number on every server (decimals). In the configuration, you are able to define a threshold for many "sample components". Please check the wiki on the right for more information on configuring
