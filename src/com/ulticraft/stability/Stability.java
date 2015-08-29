@@ -179,8 +179,8 @@ public class Stability extends JavaPlugin
 
 				else if(args[1].equalsIgnoreCase("collectgarbage") || args[1].equalsIgnoreCase("gc"))
 				{
-					sampler.getAnalyzer().requestGC();
-					sender.sendMessage(String.valueOf(Final.TAG_STABILITY) + ChatColor.GREEN + "Requesting Garbage Collecter");
+					System.gc();
+					sender.sendMessage(String.valueOf(Final.TAG_STABILITY) + ChatColor.GREEN + "Running Garbage Collecter");
 					getDisbatcher().notifyPlayers("Collect Garbage", sender.getName());
 				}
 
