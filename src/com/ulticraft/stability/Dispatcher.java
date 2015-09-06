@@ -19,7 +19,6 @@ import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
 import com.ulticraft.core.Cooldown;
 
 public class Dispatcher implements Listener
@@ -209,100 +208,78 @@ public class Dispatcher implements Listener
 		if(this.isMonitoringPlayer(player))
 		{
 			this.removeMonitoringPlayer(player);
-			player.sendMessage(String.valueOf(Final.TAG_STABILITY) + ChatColor.RED + "MONITORING DISABLED");
 			new Title(ChatColor.RED + "Stopped Monitoring", "", 10, 20, 30).send(player);
 		}
 		else
 		{
-			this.pl.getServer().getScheduler().scheduleSyncDelayedTask((Plugin) this.pl, (Runnable) new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					Dispatcher.this.addMonitoringPlayer(player);
-				}
-			}, 30L);
-			player.sendMessage(String.valueOf(Final.TAG_STABILITY) + ChatColor.GREEN + "MONITORING ENABLED");
+			Dispatcher.this.addMonitoringPlayer(player);
 			player.sendMessage(String.valueOf(Final.TAG_STABILITY) + ChatColor.GREEN + "TPS " + ChatColor.GOLD + "MEM " + ChatColor.RED + "CHUNKS " + ChatColor.LIGHT_PURPLE + "CHUNKGEN " + ChatColor.AQUA + "MOBS " + ChatColor.YELLOW + "DROP " + ChatColor.DARK_RED + "REDSTONE");
-
-			if(monitoringPlayers.size() > 1)
-			{
-				String f = Final.TAG_STABILITY + ChatColor.GREEN + "Monitoring: " + ChatColor.AQUA + "You";
-
-				for(Player i : monitoringPlayers)
-				{
-					if(i != player)
-					{
-						f = f + ", " + i.getName();
-					}
-				}
-
-				player.sendMessage(f);
-			}
-
-			new Title(ChatColor.GREEN + "Started Monitoring", ChatColor.AQUA + "Map Chart: " + ChatColor.GREEN + "TPS " + ChatColor.RED + "RAM " + ChatColor.BLUE + "CHUNKS", 10, 20, 50).send(player);
 		}
 	}
 
 	public void disbatchMonitorInformation(final Sample sampleData, String action, SampleArray array)
 	{
+		int gen = sampleData.getGenerations();
+		String tpsm = new StringBuilder().append(new DecimalFormat("#.#").format(sampleData.getTps())).toString();
+		String memm = " " + NumberFormat.getNumberInstance(Locale.US).format(Double.valueOf(new DecimalFormat("#").format(sampleData.getFreeMemory() / 1024.0 / 1024.0)));
+		if(sampleData.getTps() == -20.0)
+		{
+			double percent = ((((double) pl.getConfiguration().getTpsSoftness() - TPSSample.getRemaining()) / (double) pl.getConfiguration().getTpsSoftness()) * 100);
+			action = ChatColor.GREEN + "Presampling " + new DecimalFormat("#").format(percent) + "%";
+			pl.verbose(action);
+			tpsm = new StringBuilder().append(ChatColor.GREEN).append(ChatColor.MAGIC).append("20").toString();
+		}
+		
+		else if(sampleData.getTps() < this.pl.getConfiguration().getThresholdTps())
+		{
+			tpsm = new StringBuilder().append(ChatColor.GREEN).append(ChatColor.UNDERLINE).append(tpsm).append(ChatColor.RESET).toString();
+		}
+
+		else
+		{
+			tpsm = ChatColor.GREEN + tpsm + ChatColor.RESET;
+		}
+
+		if(sampleData.getFreeMemory() / 1024.0 / 1024.0 / (Runtime.getRuntime().maxMemory() / 1024L / 1024L) < this.pl.getConfiguration().getThresholdMem())
+		{
+			memm = new StringBuilder().append(ChatColor.GOLD).append(ChatColor.UNDERLINE).append(memm).append(ChatColor.RESET).toString();
+		}
+
+		else
+		{
+			memm = ChatColor.GOLD + memm + ChatColor.RESET;
+		}
+
+		String gens = NumberFormat.getNumberInstance(Locale.US).format(gen);
+
+		if(gen > pl.getConfiguration().getMaxChunkOverload())
+		{
+			gens = ChatColor.LIGHT_PURPLE + "" + ChatColor.UNDERLINE + gens + ChatColor.RESET;
+		}
+
+		else
+		{
+			gens = ChatColor.LIGHT_PURPLE + gens + ChatColor.RESET;
+		}
+
+		String reds = NumberFormat.getNumberInstance(Locale.US).format(sampleData.getRedstoneClocks());
+
+		if(sampleData.getRedstoneClocks() > pl.getConfiguration().getMaxRedstoneUpdates())
+		{
+			reds = ChatColor.DARK_RED + "" + ChatColor.UNDERLINE + reds + ChatColor.RESET;
+		}
+
+		else
+		{
+			reds = ChatColor.DARK_RED + reds + ChatColor.RESET;
+		}
+
+		Title t = new Title(action, String.valueOf(tpsm) + " " + memm + " " + ChatColor.RED + NumberFormat.getNumberInstance(Locale.US).format(sampleData.getChunksLoaded()) + " " + gens + " " + ChatColor.AQUA + NumberFormat.getNumberInstance(Locale.US).format(sampleData.getLivingEntities()) + " " + ChatColor.YELLOW + NumberFormat.getNumberInstance(Locale.US).format(sampleData.getDropEntities()) + " " + reds, 0, 80, 100);
+		
 		for(final Player i : this.monitoringPlayers)
 		{
-			int gen = sampleData.getGenerations();
-			String tpsm = new StringBuilder().append(new DecimalFormat("#.#").format(sampleData.getTps())).toString();
-			String memm = " " + NumberFormat.getNumberInstance(Locale.US).format(Double.valueOf(new DecimalFormat("#").format(sampleData.getFreeMemory() / 1024.0 / 1024.0)));
-			if(sampleData.getTps() == -20.0)
-			{
-				double percent = ((((double) pl.getConfiguration().getTpsSoftness() - TPSSample.getRemaining()) / (double) pl.getConfiguration().getTpsSoftness()) * 100);
-				action = ChatColor.GREEN + "Presampling " + new DecimalFormat("#").format(percent) + "%";
-				pl.verbose(action);
-				tpsm = new StringBuilder().append(ChatColor.GREEN).append(ChatColor.MAGIC).append("20").toString();
-			}
-			else if(sampleData.getTps() < this.pl.getConfiguration().getThresholdTps())
-			{
-				tpsm = new StringBuilder().append(ChatColor.GREEN).append(ChatColor.UNDERLINE).append(tpsm).append(ChatColor.RESET).toString();
-			}
-
-			else
-			{
-				tpsm = ChatColor.GREEN + tpsm + ChatColor.RESET;
-			}
-
-			if(sampleData.getFreeMemory() / 1024.0 / 1024.0 / (Runtime.getRuntime().maxMemory() / 1024L / 1024L) < this.pl.getConfiguration().getThresholdMem())
-			{
-				memm = new StringBuilder().append(ChatColor.GOLD).append(ChatColor.UNDERLINE).append(memm).append(ChatColor.RESET).toString();
-			}
-
-			else
-			{
-				memm = ChatColor.GOLD + memm + ChatColor.RESET;
-			}
-
-			String gens = NumberFormat.getNumberInstance(Locale.US).format(gen);
-
-			if(gen > pl.getConfiguration().getMaxChunkOverload())
-			{
-				gens = ChatColor.LIGHT_PURPLE + "" + ChatColor.UNDERLINE + gens + ChatColor.RESET;
-			}
-
-			else
-			{
-				gens = ChatColor.LIGHT_PURPLE + gens + ChatColor.RESET;
-			}
-
-			String reds = NumberFormat.getNumberInstance(Locale.US).format(sampleData.getRedstoneClocks());
-
-			if(sampleData.getRedstoneClocks() > pl.getConfiguration().getMaxRedstoneUpdates())
-			{
-				reds = ChatColor.DARK_RED + "" + ChatColor.UNDERLINE + reds + ChatColor.RESET;
-			}
-
-			else
-			{
-				reds = ChatColor.DARK_RED + reds + ChatColor.RESET;
-			}
-
-			new Title(action, String.valueOf(tpsm) + " " + memm + " " + ChatColor.RED + NumberFormat.getNumberInstance(Locale.US).format(sampleData.getChunksLoaded()) + " " + gens + " " + ChatColor.AQUA + NumberFormat.getNumberInstance(Locale.US).format(sampleData.getLivingEntities()) + " " + ChatColor.YELLOW + NumberFormat.getNumberInstance(Locale.US).format(sampleData.getDropEntities()) + " " + reds, 0, 40, 20).send(i);
+			t.sendTitleAsSubtitle(i);
+			t.sendAsAction(i);
 		}
 	}
 

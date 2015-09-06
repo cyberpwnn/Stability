@@ -8,6 +8,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import com.ulticraft.core.GUIHandler;
 
 public class Stability extends JavaPlugin
 {
@@ -15,6 +16,7 @@ public class Stability extends JavaPlugin
 	private ConfigurationFile config;
 	private Dispatcher disp;
 	private Sampler sampler;
+	private GUIHandler guiHandler;
 	private static boolean verbose;
 
 	public void onEnable()
@@ -23,6 +25,7 @@ public class Stability extends JavaPlugin
 		this.config = new ConfigurationFile(this);
 		Stability.verbose = this.config.isPluginVerbose();
 		this.verbose("Loaded Config");
+		this.guiHandler = new GUIHandler(this);
 		this.disp = new Dispatcher(this);
 		this.verbose("Started Dispatcher");
 		this.sampler = new Sampler(this, 1, this.config.getSampleCount());
@@ -310,5 +313,10 @@ public class Stability extends JavaPlugin
 	public Dispatcher getDisbatcher()
 	{
 		return this.disp;
+	}
+	
+	public GUIHandler getGuiHandler()
+	{
+		return guiHandler;
 	}
 }

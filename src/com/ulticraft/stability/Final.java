@@ -34,7 +34,7 @@ public class Final
 	public static final String ALG_FEATURE_STACKTT_ENABLE = "algorithm.feature.stack-trace-tracer.enable";
 	public static final String ALG_FEATURE_STACKTT_MAX_TICK = "algorithm.feature.stack-trace-tracer.max-tick-trace";
 	public static final String ALG_RESPRED_ = "";
-	public static final String PLUGIN_VERSION = "1.5.5.2";
+	public static final String PLUGIN_VERSION = "1.6";
 	public static final String PERM_MONITOR = "stability.monitor";
 	public static final String PERM_ACTION = "stability.action";
 	public static final String PERM_RELOAD = "stability.reload";

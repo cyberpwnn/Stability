@@ -160,9 +160,61 @@ public class Title
 		this.ticks = false;
 	}
 
+	public void sendAsAction(Player player)
+	{
+		try
+		{
+			String nmsver = player.getServer().getClass().getPackage().getName();
+			nmsver = nmsver.substring(nmsver.lastIndexOf(".") + 1);
+
+			Class<?> c1 = Class.forName("org.bukkit.craftbukkit." + nmsver + ".entity.CraftPlayer");
+			Object p = c1.cast(player);
+			Object ppoc = null;
+			Class<?> c4 = Class.forName("net.minecraft.server." + nmsver + ".PacketPlayOutChat");
+			Class<?> c5 = Class.forName("net.minecraft.server." + nmsver + ".Packet");
+
+			if(nmsver.equalsIgnoreCase("v1_8_R1") || !nmsver.startsWith("v1_8_"))
+			{
+				Class<?> c2 = Class.forName("net.minecraft.server." + nmsver + ".ChatSerializer");
+				Class<?> c3 = Class.forName("net.minecraft.server." + nmsver + ".IChatBaseComponent");
+				Method m3 = c2.getDeclaredMethod("a", new Class<?>[]
+				{ String.class });
+				Object cbc = c3.cast(m3.invoke(c2, "{\"text\": \"" + getSubtitle() + "\"}"));
+				ppoc = c4.getConstructor(new Class<?>[]
+				{ c3, byte.class }).newInstance(new Object[]
+				{ cbc, (byte) 2 });
+			}
+
+			else
+			{
+				Class<?> c2 = Class.forName("net.minecraft.server." + nmsver + ".ChatComponentText");
+				Class<?> c3 = Class.forName("net.minecraft.server." + nmsver + ".IChatBaseComponent");
+				Object o = c2.getConstructor(new Class<?>[]
+				{ String.class }).newInstance(new Object[]
+				{ getSubtitle() });
+				ppoc = c4.getConstructor(new Class<?>[]
+				{ c3, byte.class }).newInstance(new Object[]
+				{ o, (byte) 2 });
+			}
+
+			Method m1 = c1.getDeclaredMethod("getHandle", new Class<?>[] {});
+			Object h = m1.invoke(p);
+			Field f1 = h.getClass().getDeclaredField("playerConnection");
+			Object pc = f1.get(h);
+			Method m5 = pc.getClass().getDeclaredMethod("sendPacket", new Class<?>[]
+			{ c5 });
+			m5.invoke(pc, ppoc);
+		}
+
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+		}
+	}
+
 	public void send(final Player player)
 	{
-		if (this.packetTitle != null)
+		if(this.packetTitle != null)
 		{
 			this.resetTitle(player);
 			try
@@ -172,21 +224,54 @@ public class Title
 				final Object[] actions = (Object[]) this.packetActions.getEnumConstants();
 				final Method sendPacket = this.getMethod(connection.getClass(), "sendPacket", (Class<?>[]) new Class[0]);
 				Object packet = this.packetTitle.getConstructor(this.packetActions, this.chatBaseComponent, Integer.TYPE, Integer.TYPE, Integer.TYPE).newInstance(actions[2], null, this.fadeInTime * (this.ticks ? 1 : 20), this.stayTime * (this.ticks ? 1 : 20), this.fadeOutTime * (this.ticks ? 1 : 20));
-				if (this.fadeInTime != -1 && this.fadeOutTime != -1 && this.stayTime != -1)
+				if(this.fadeInTime != -1 && this.fadeOutTime != -1 && this.stayTime != -1)
 				{
 					sendPacket.invoke(connection, packet);
 				}
 				Object serialized = this.getMethod(this.nmsChatSerializer, "a", String.class).invoke(null, "{text:\"" + ChatColor.translateAlternateColorCodes('&', this.title) + "\",color:" + this.titleColor.name().toLowerCase() + "}");
 				packet = this.packetTitle.getConstructor(this.packetActions, this.chatBaseComponent).newInstance(actions[0], serialized);
 				sendPacket.invoke(connection, packet);
-				if (this.subtitle != "")
+				if(this.subtitle != "")
 				{
 					serialized = this.getMethod(this.nmsChatSerializer, "a", String.class).invoke(null, "{text:\"" + ChatColor.translateAlternateColorCodes('&', this.subtitle) + "\",color:" + this.subtitleColor.name().toLowerCase() + "}");
 					packet = this.packetTitle.getConstructor(this.packetActions, this.chatBaseComponent).newInstance(actions[1], serialized);
 					sendPacket.invoke(connection, packet);
 				}
 			}
-			catch (Exception e)
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void sendTitleAsSubtitle(final Player player)
+	{
+		if(this.packetTitle != null)
+		{
+			this.resetTitle(player);
+			try
+			{
+				final Object handle = this.getHandle(player);
+				final Object connection = this.getField(handle.getClass(), "playerConnection").get(handle);
+				final Object[] actions = (Object[]) this.packetActions.getEnumConstants();
+				final Method sendPacket = this.getMethod(connection.getClass(), "sendPacket", (Class<?>[]) new Class[0]);
+				Object packet = this.packetTitle.getConstructor(this.packetActions, this.chatBaseComponent, Integer.TYPE, Integer.TYPE, Integer.TYPE).newInstance(actions[2], null, this.fadeInTime * (this.ticks ? 1 : 20), this.stayTime * (this.ticks ? 1 : 20), this.fadeOutTime * (this.ticks ? 1 : 20));
+				if(this.fadeInTime != -1 && this.fadeOutTime != -1 && this.stayTime != -1)
+				{
+					sendPacket.invoke(connection, packet);
+				}
+				Object serialized = this.getMethod(this.nmsChatSerializer, "a", String.class).invoke(null, "{text:\"" + ChatColor.translateAlternateColorCodes('&', " ") + "\",color:" + this.titleColor.name().toLowerCase() + "}");
+				packet = this.packetTitle.getConstructor(this.packetActions, this.chatBaseComponent).newInstance(actions[0], serialized);
+				sendPacket.invoke(connection, packet);
+				if(this.title != " ")
+				{
+					serialized = this.getMethod(this.nmsChatSerializer, "a", String.class).invoke(null, "{text:\"" + ChatColor.translateAlternateColorCodes('&', this.title) + "\",color:" + this.subtitleColor.name().toLowerCase() + "}");
+					packet = this.packetTitle.getConstructor(this.packetActions, this.chatBaseComponent).newInstance(actions[1], serialized);
+					sendPacket.invoke(connection, packet);
+				}
+			}
+			catch(Exception e)
 			{
 				e.printStackTrace();
 			}
@@ -195,7 +280,7 @@ public class Title
 
 	public void broadcast()
 	{
-		for (final Player p : Bukkit.getOnlinePlayers())
+		for(final Player p : Bukkit.getOnlinePlayers())
 		{
 			this.send(p);
 		}
@@ -212,7 +297,7 @@ public class Title
 			final Object packet = this.packetTitle.getConstructor(this.packetActions, this.chatBaseComponent).newInstance(actions[3], null);
 			sendPacket.invoke(connection, packet);
 		}
-		catch (Exception e)
+		catch(Exception e)
 		{
 			e.printStackTrace();
 		}
@@ -229,7 +314,7 @@ public class Title
 			final Object packet = this.packetTitle.getConstructor(this.packetActions, this.chatBaseComponent).newInstance(actions[4], null);
 			sendPacket.invoke(connection, packet);
 		}
-		catch (Exception e)
+		catch(Exception e)
 		{
 			e.printStackTrace();
 		}
@@ -245,7 +330,7 @@ public class Title
 	{
 		final int a = (classes != null) ? classes.length : 0;
 		final Class[] types = new Class[a];
-		for (int i = 0; i < a; ++i)
+		for(int i = 0; i < a; ++i)
 		{
 			types[i] = this.getPrimitiveType(classes[i]);
 		}
@@ -254,13 +339,13 @@ public class Title
 
 	private static boolean equalsTypeArray(final Class<?>[] a, final Class<?>[] o)
 	{
-		if (a.length != o.length)
+		if(a.length != o.length)
 		{
 			return false;
 		}
-		for (int i = 0; i < a.length; ++i)
+		for(int i = 0; i < a.length; ++i)
 		{
-			if (!a[i].equals(o[i]) && !a[i].isAssignableFrom(o[i]))
+			if(!a[i].equals(o[i]) && !a[i].isAssignableFrom(o[i]))
 			{
 				return false;
 			}
@@ -274,7 +359,7 @@ public class Title
 		{
 			return this.getMethod("getHandle", obj.getClass(), (Class<?>[]) new Class[0]).invoke(obj, new Object[0]);
 		}
-		catch (Exception e)
+		catch(Exception e)
 		{
 			e.printStackTrace();
 			return null;
@@ -286,11 +371,11 @@ public class Title
 	{
 		final Class[] t = this.toPrimitiveTypeArray(paramTypes);
 		Method[] methods;
-		for (int length = (methods = clazz.getMethods()).length, i = 0; i < length; ++i)
+		for(int length = (methods = clazz.getMethods()).length, i = 0; i < length; ++i)
 		{
 			final Method m = methods[i];
 			final Class[] types = this.toPrimitiveTypeArray(m.getParameterTypes());
-			if (m.getName().equals(name) && equalsTypeArray(types, t))
+			if(m.getName().equals(name) && equalsTypeArray(types, t))
 			{
 				return m;
 			}
@@ -313,7 +398,7 @@ public class Title
 		{
 			clazz = Class.forName(fullName);
 		}
-		catch (Exception e)
+		catch(Exception e)
 		{
 			e.printStackTrace();
 		}
@@ -328,7 +413,7 @@ public class Title
 			field.setAccessible(true);
 			return field;
 		}
-		catch (Exception e)
+		catch(Exception e)
 		{
 			e.printStackTrace();
 			return null;
@@ -338,10 +423,10 @@ public class Title
 	private Method getMethod(final Class<?> clazz, final String name, final Class<?>... args)
 	{
 		Method[] methods;
-		for (int length = (methods = clazz.getMethods()).length, i = 0; i < length; ++i)
+		for(int length = (methods = clazz.getMethods()).length, i = 0; i < length; ++i)
 		{
 			final Method m = methods[i];
-			if (m.getName().equals(name) && (args.length == 0 || this.ClassListEqual(args, m.getParameterTypes())))
+			if(m.getName().equals(name) && (args.length == 0 || this.ClassListEqual(args, m.getParameterTypes())))
 			{
 				m.setAccessible(true);
 				return m;
@@ -353,13 +438,13 @@ public class Title
 	private boolean ClassListEqual(final Class<?>[] l1, final Class<?>[] l2)
 	{
 		boolean equal = true;
-		if (l1.length != l2.length)
+		if(l1.length != l2.length)
 		{
 			return false;
 		}
-		for (int i = 0; i < l1.length; ++i)
+		for(int i = 0; i < l1.length; ++i)
 		{
-			if (l1[i] != l2[i])
+			if(l1[i] != l2[i])
 			{
 				equal = false;
 				break;

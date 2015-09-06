@@ -130,6 +130,7 @@ import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.event.world.WorldSaveEvent;
 import org.bukkit.event.world.WorldUnloadEvent;
 import org.bukkit.plugin.RegisteredListener;
+import com.ulticraft.core.GUIHandler;
 
 @SuppressWarnings("deprecation")
 public class StackTraceMonitor implements Listener
@@ -140,12 +141,14 @@ public class StackTraceMonitor implements Listener
 	private long traceLeft;
 	private StackTracePackage p;
 	private Player tracingPlayer;
+	private GUIHandler handler;
 
 	public StackTraceMonitor(Stability st)
 	{
 		this.st = st;
 		this.traceLeft = 0;
 		this.traceFor = 0;
+		this.handler = st.getGuiHandler();
 
 		if(st.getConfiguration().isEnableStackTracer())
 		{
@@ -173,8 +176,8 @@ public class StackTraceMonitor implements Listener
 			{
 				i.sendMessage(Final.TAG_STABILITY + "" + ChatColor.RED + ChatColor.UNDERLINE + "PROFILING for " + durationTicks / 20 + " seconds. EXPECT LAG!");
 			}
-			
-			st.getSampler().getActionHistory().act(player.getName() + " started stacktrace for " + durationTicks/20 + "s");
+
+			st.getSampler().getActionHistory().act(player.getName() + " started stacktrace for " + durationTicks / 20 + "s");
 
 			tracingPlayer = player;
 			player.sendMessage(ChatColor.DARK_PURPLE + "Started Tracing...");
@@ -215,7 +218,30 @@ public class StackTraceMonitor implements Listener
 
 			String got = NumberFormat.getNumberInstance(Locale.US).format(gotm);
 
-			new Title(ChatColor.DARK_PURPLE + "Caught " + got, ChatColor.RED + "Remaining: " + getTraceTimeRemaining() / 20 + "s", 0, 20, 0).send(tracingPlayer);
+			String pr = ChatColor.YELLOW + "Most Demand: None";
+			int ti = 0;
+
+			try
+			{
+				for(String i : p.getTraced().keySet())
+				{
+					if(p.getTraced().get(i).intValue() > ti)
+					{
+						ti = p.getTraced().get(i).intValue();
+						pr = ChatColor.YELLOW + "Most Demand: " + ChatColor.RED + ChatColor.UNDERLINE + i;
+					}
+				}
+			}
+
+			catch(NullPointerException e)
+			{
+				pr = ChatColor.LIGHT_PURPLE + "No Plugins Caught!";
+			}
+
+			Title titlef = new Title("", pr);
+			Title title = new Title(ChatColor.DARK_PURPLE + "Caught " + got, ChatColor.RED + "Remaining: " + getTraceTimeRemaining() / 20 + "s", 0, 20, 0);
+			title.send(tracingPlayer);
+			titlef.sendAsAction(tracingPlayer);
 
 			traceLeft--;
 
@@ -231,11 +257,13 @@ public class StackTraceMonitor implements Listener
 	public void finishTrace()
 	{
 		tracingPlayer.sendMessage("Traced " + p.getTraced().size() + " plugin(s) in " + (p.getTicks() / 20) + "s");
-		p.sendBook(tracingPlayer);
+		p.sendBook(tracingPlayer, handler);
+
 		for(Player i : st.getServer().getOnlinePlayers())
 		{
 			i.sendMessage(Final.TAG_STABILITY + ChatColor.UNDERLINE + "" + ChatColor.GREEN + "Stack Trace Finished.");
 		}
+
 		tracingPlayer = null;
 	}
 
