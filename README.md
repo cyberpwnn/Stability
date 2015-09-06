@@ -16,11 +16,11 @@ An important part of making stability work for your server, is the configuration
 Commands and permissions are located on the wiki also!
 
 # Downloads
-[RELEASE v1.5.5.1](https://github.com/danielmills/Stability/blob/master/build/latest/release/Stability.jar?raw=true)
+[RELEASE v1.5.5.2](https://github.com/danielmills/Stability/blob/master/build/latest/release/Stability.jar?raw=true)
 
 ## Changelog
 
-### Stability 1.5.5.1
+### Stability 1.5.5.2
 Stability 1.5.5.1 Fixes chunks from being unloaded even further if it isnt effective.
 * If the previous chunk unload operation did not unload more than 256 chunks, prevent then next.
 * A cooldown will be thrown for about half a minute preventing stability from trying again.
