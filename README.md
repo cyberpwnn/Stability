@@ -16,9 +16,17 @@ An important part of making stability work for your server, is the configuration
 Commands and permissions are located on the wiki also!
 
 # Downloads
-[RELEASE v1.5.5.2](https://github.com/danielmills/Stability/blob/master/build/latest/release/Stability.jar?raw=true)
+[RELEASE v1.6](https://github.com/danielmills/Stability/blob/master/build/latest/release/Stability.jar?raw=true)
 
 ## Changelog
+
+### Stability 1.6
+Stability 1.6 Adds many fixes, including several important ones. The GUI / SubSubTitle Update!
+* Uses Sub-Sub titles instead of subtitles for information
+* Uses Sub titles for actions instead of titles
+* Stack Tracing now sends a report via gui!
+* Fixed Dispatch info being formatted for every message, now per dispatch, not per player per dispatch.
+* Some Tweaks, but more planned.
 
 ### Stability 1.5.5.2
 Stability 1.5.5.1 Fixes chunks from being unloaded even further if it isnt effective.
