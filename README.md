@@ -16,9 +16,15 @@ An important part of making stability work for your server, is the configuration
 Commands and permissions are located on the wiki also!
 
 # Downloads
-[RELEASE v1.6](https://github.com/danielmills/Stability/blob/master/build/latest/release/Stability.jar?raw=true)
+[RELEASE v1.6.1](https://github.com/danielmills/Stability/blob/master/build/latest/release/Stability.jar?raw=true)
 
 ## Changelog
+
+### Stability 1.6.1
+Stability 1.6.1 Makes use of its GUI api more often, and works on display of dispatching info.
+* Using /st history now shows a gui of history instead of a list.
+* The Dispatcher changes positions depending on if you are moving or not (try it out)
+* Adds several new config options which are not used yet but will be soon!
 
 ### Stability 1.6
 Stability 1.6 Adds many fixes, including several important ones. The GUI / SubSubTitle Update!
