@@ -3,7 +3,7 @@
 
 plugin:
   verbose: false
-  schema: 1.5.3
+  schema: 1.6.1
 algorithm:
   tps-padding: 175
   sample-count: 8
@@ -17,6 +17,13 @@ algorithm:
     redstone:
       max-updates-per-rtick: 64
       action-break-clocks: true
+    suppression:
+      drops:
+        enable: true
+        threshold: 128
+        adaptive: 
+          quick-pickup: true
+          cache-distant-drops: true
     cull:
       entities-per-chunk: 16
       adaptive:

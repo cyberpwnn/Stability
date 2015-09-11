@@ -8,7 +8,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import com.ulticraft.core.GUIHandler;
 
 public class Stability extends JavaPlugin
 {
@@ -16,7 +15,6 @@ public class Stability extends JavaPlugin
 	private ConfigurationFile config;
 	private Dispatcher disp;
 	private Sampler sampler;
-	private GUIHandler guiHandler;
 	private static boolean verbose;
 
 	public void onEnable()
@@ -25,7 +23,6 @@ public class Stability extends JavaPlugin
 		this.config = new ConfigurationFile(this);
 		Stability.verbose = this.config.isPluginVerbose();
 		this.verbose("Loaded Config");
-		this.guiHandler = new GUIHandler(this);
 		this.disp = new Dispatcher(this);
 		this.verbose("Started Dispatcher");
 		this.sampler = new Sampler(this, 1, this.config.getSampleCount());
@@ -45,6 +42,29 @@ public class Stability extends JavaPlugin
 
 	public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args)
 	{
+		if(cmd.getName().equalsIgnoreCase("monitor"))
+		{
+			if(sender instanceof Player)
+			{
+				if(sender.hasPermission("stability.monitor"))
+				{
+					this.disp.toggleMonitoring((Player) sender);
+				}
+
+				else
+				{
+					sender.sendMessage(String.valueOf(Final.TAG_STABILITY) + ChatColor.RED + "You do not have permission to use monitoring!");
+				}
+			}
+
+			else
+			{
+				sender.sendMessage("Monitoring is for in-game use only!");
+			}
+
+			return true;
+		}
+		
 		if(!cmd.getName().equalsIgnoreCase("stability"))
 		{
 			return false;
@@ -313,10 +333,5 @@ public class Stability extends JavaPlugin
 	public Dispatcher getDisbatcher()
 	{
 		return this.disp;
-	}
-	
-	public GUIHandler getGuiHandler()
-	{
-		return guiHandler;
 	}
 }

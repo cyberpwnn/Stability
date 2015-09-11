@@ -50,6 +50,11 @@ public class Analyzer
 		acted--;
 		
 		String action = "";
+		if(sample.getDropEntities() > config.getDropsThreshold())
+		{
+			
+		}
+		
 		if(sample.getFreeMemory() / 1024.0 / 1024.0 / (Runtime.getRuntime().maxMemory() / 1024L / 1024L) < this.config.getThresholdMem())
 		{
 			needsChunkGC = true;

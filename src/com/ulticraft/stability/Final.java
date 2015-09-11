@@ -33,8 +33,12 @@ public class Final
 	public static final String ALG_FEATURE_DISP_SUPPRESSION_DISP_TICK = "algorithm.feature.dispatcher.dispatcher-suppression.display-ticks";
 	public static final String ALG_FEATURE_STACKTT_ENABLE = "algorithm.feature.stack-trace-tracer.enable";
 	public static final String ALG_FEATURE_STACKTT_MAX_TICK = "algorithm.feature.stack-trace-tracer.max-tick-trace";
+	public static final String ALG_SUP_DROP_ENABLE = "suppression.drops.enable";
+	public static final String ALG_SUP_DROP_THRESHOLD = "suppression.drops.threshold";
+	public static final String ALG_SUP_DROP_ADAPTIVE_QUICKUP = "suppression.drops.adaptive.quick-pickup";
+	public static final String ALG_SUP_DROP_ADAPTIVE_CACHE_DROPS = "suppression.drops.adaptive.cache-distant-drops";
 	public static final String ALG_RESPRED_ = "";
-	public static final String PLUGIN_VERSION = "1.6";
+	public static final String PLUGIN_VERSION = "1.6.1";
 	public static final String PERM_MONITOR = "stability.monitor";
 	public static final String PERM_ACTION = "stability.action";
 	public static final String PERM_RELOAD = "stability.reload";
@@ -55,7 +59,7 @@ public class Final
 			ChatColor.GREEN + "/st history" + ChatColor.YELLOW + " - See who did what & when, via SPAM!.",
 			ChatColor.GREEN + "/st reload" + ChatColor.YELLOW + " - Reload Configuration & Restart Sampler", 
 			ChatColor.GREEN + "/st actions" + ChatColor.YELLOW + " - Invoke Stabilization To clean the runtime",
-			ChatColor.YELLOW + "/st stacktrace <ticks>" + ChatColor.RED + " - Traces ALL CODE ACTIONS"
+			ChatColor.YELLOW + "/st stacktrace <ticks>" + ChatColor.RED + " - Trace Plugins"
 		};
 		
 		MSG_ACTIONS = new String[]

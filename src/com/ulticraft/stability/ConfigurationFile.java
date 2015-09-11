@@ -37,6 +37,10 @@ public class ConfigurationFile
 	private boolean enableStackTracer;
 	private int maxTraceTick;
 	private int maxEntityChunk;
+	private boolean dropsEnable;
+	private int dropsThreshold;
+	private boolean dropsQuick;
+	private boolean dropsCache;
 	
 	private String schema;
 	private File configurationFile;
@@ -124,6 +128,10 @@ public class ConfigurationFile
 		this.enableStackTracer = fc.getBoolean(Final.ALG_FEATURE_STACKTT_ENABLE);
 		this.maxTraceTick = fc.getInt(Final.ALG_FEATURE_STACKTT_MAX_TICK);
 		this.maxEntityChunk = fc.getInt(Final.ALG_THRESH_MAX_ENTITIES_CHUNK);
+		this.dropsEnable = fc.getBoolean(Final.ALG_SUP_DROP_ENABLE);
+		this.dropsThreshold = fc.getInt(Final.ALG_SUP_DROP_THRESHOLD);
+		this.dropsQuick = fc.getBoolean(Final.ALG_SUP_DROP_ADAPTIVE_QUICKUP);
+		this.dropsCache = fc.getBoolean(Final.ALG_SUP_DROP_ADAPTIVE_CACHE_DROPS);
 				
 		boolean invalid = false;
 		
@@ -146,6 +154,13 @@ public class ConfigurationFile
 			invalid = true;
 			fc.set(Final.ALG_CHUNK_MAX_CULL_TICK, 75);
 			plugin.warn("CONFIG: CHUNK SPEED TOO LOW!");
+		}
+		
+		if(dropsThreshold < 32)
+		{
+			invalid = true;
+			fc.set(Final.ALG_SUP_DROP_THRESHOLD, 32);
+			plugin.warn("CONFIG: DROP THRESHOLD TOO LOW!");
 		}
 		
 		if(invalid)
@@ -208,6 +223,31 @@ public class ConfigurationFile
 				fos.close();
 			}
 		}
+	}
+
+	public int getMaxEntityChunk()
+	{
+		return maxEntityChunk;
+	}
+
+	public boolean isDropsEnable()
+	{
+		return dropsEnable;
+	}
+
+	public int getDropsThreshold()
+	{
+		return dropsThreshold;
+	}
+
+	public boolean isDropsQuick()
+	{
+		return dropsQuick;
+	}
+
+	public boolean isDropsCache()
+	{
+		return dropsCache;
 	}
 
 	public boolean isPluginVerbose()

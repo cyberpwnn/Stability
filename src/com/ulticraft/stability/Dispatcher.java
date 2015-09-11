@@ -3,6 +3,7 @@ package com.ulticraft.stability;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
 import org.bukkit.ChatColor;
@@ -17,6 +18,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import com.ulticraft.core.Cooldown;
@@ -26,6 +28,8 @@ public class Dispatcher implements Listener
 	private ArrayList<Player> monitoringPlayers;
 	private Cooldown cooldown;
 	private Stability pl;
+	private HashMap<Player, Boolean> monitoringMinimalist;
+	private HashMap<Player, Integer> monitoringMinimalistTime;
 
 	public Dispatcher(final Stability plugin)
 	{
@@ -33,6 +37,8 @@ public class Dispatcher implements Listener
 		this.pl = plugin;
 		this.pl.getServer().getPluginManager().registerEvents(this, this.pl);
 		this.cooldown = new Cooldown(300);
+		this.monitoringMinimalist = new HashMap<Player, Boolean>();
+		this.monitoringMinimalistTime = new HashMap<Player, Integer>();
 	}
 
 	public void addMonitoringPlayer(final Player player)
@@ -46,6 +52,8 @@ public class Dispatcher implements Listener
 			}
 
 			this.monitoringPlayers.add(player);
+			this.monitoringMinimalist.put(player, true);
+			this.monitoringMinimalistTime.put(player, 0);
 
 			if(pl.getConfiguration().isMapsEnabled())
 			{
@@ -85,6 +93,8 @@ public class Dispatcher implements Listener
 		if(this.isMonitoringPlayer(player))
 		{
 			this.monitoringPlayers.remove(player);
+			this.monitoringMinimalist.remove(player);
+			this.monitoringMinimalistTime.remove(player);
 
 			if(pl.getConfiguration().isMapsEnabled())
 			{
@@ -278,8 +288,27 @@ public class Dispatcher implements Listener
 		
 		for(final Player i : this.monitoringPlayers)
 		{
-			t.sendTitleAsSubtitle(i);
-			t.sendAsAction(i);
+			if(this.monitoringMinimalist.get(i))
+			{
+				t.send(i);
+			}
+			
+			else
+			{
+				t.sendTitleAsSubtitle(i);
+				t.sendAsAction(i);
+			}
+			
+			this.monitoringMinimalistTime.put(i, this.monitoringMinimalistTime.get(i) + 1);
+			
+			if(this.monitoringMinimalistTime.get(i) > (20 / pl.getConfiguration().getDispatchTick()) * 5)
+			{
+				if(this.monitoringMinimalistTime.get(i) < (pl.getConfiguration().getDispatchTick()) + ((20 / pl.getConfiguration().getDispatchTick()) * 5))
+				{
+					this.monitoringMinimalist.put(i, true);
+					new Title(" ", ChatColor.BLACK + "" + ChatColor.MAGIC + ChatColor.stripColor(String.valueOf(tpsm) + " " + memm + " " + ChatColor.BLACK + NumberFormat.getNumberInstance(Locale.US).format(sampleData.getChunksLoaded()) + " " + gens + " " + ChatColor.BLACK + NumberFormat.getNumberInstance(Locale.US).format(sampleData.getLivingEntities()) + " " + ChatColor.BLACK + NumberFormat.getNumberInstance(Locale.US).format(sampleData.getDropEntities()) + " " + reds)).sendAsAction(i);
+				}
+			}
 		}
 	}
 
@@ -368,6 +397,21 @@ public class Dispatcher implements Listener
 		{
 			player.sendMessage(Final.TAG_STABILITY + ChatColor.RED + "Please disable monitoring before using stuff!");
 			event.setCancelled(true);
+		}
+	}
+	
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onPlayerMove(PlayerMoveEvent e)
+	{
+		if(e.getFrom().distance(e.getTo()) < 0.1)
+		{
+			return;
+		}
+		
+		if(isMonitoringPlayer(e.getPlayer()))
+		{
+			this.monitoringMinimalist.put(e.getPlayer(), false);
+			this.monitoringMinimalistTime.put(e.getPlayer(), 0);
 		}
 	}
 }

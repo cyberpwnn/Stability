@@ -9,11 +9,11 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import com.ulticraft.core.GUI;
-import com.ulticraft.core.GUIElement;
-import com.ulticraft.core.GUIHandler;
-import com.ulticraft.core.GUITrigger;
 import com.ulticraft.core.ValueComparator;
+import com.ulticraft.gui.GUI;
+import com.ulticraft.gui.GUIElement;
+import com.ulticraft.gui.GUIHandler;
+import com.ulticraft.gui.GUITrigger;
 
 public class StackTracePackage
 {
@@ -156,7 +156,7 @@ public class StackTracePackage
 		}));
 		
 		guiHandler.addGui(gui);
-		guiHandler.triggerGUI(gui, player);
+		guiHandler.triggerGUI(gui);
 		guiHandler.delGui(gui);
 	}
 }

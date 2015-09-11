@@ -130,7 +130,7 @@ import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.event.world.WorldSaveEvent;
 import org.bukkit.event.world.WorldUnloadEvent;
 import org.bukkit.plugin.RegisteredListener;
-import com.ulticraft.core.GUIHandler;
+import com.ulticraft.gui.GUIHandler;
 
 @SuppressWarnings("deprecation")
 public class StackTraceMonitor implements Listener
@@ -141,14 +141,12 @@ public class StackTraceMonitor implements Listener
 	private long traceLeft;
 	private StackTracePackage p;
 	private Player tracingPlayer;
-	private GUIHandler handler;
 
 	public StackTraceMonitor(Stability st)
 	{
 		this.st = st;
 		this.traceLeft = 0;
 		this.traceFor = 0;
-		this.handler = st.getGuiHandler();
 
 		if(st.getConfiguration().isEnableStackTracer())
 		{
@@ -174,7 +172,7 @@ public class StackTraceMonitor implements Listener
 		{
 			for(Player i : st.getServer().getOnlinePlayers())
 			{
-				i.sendMessage(Final.TAG_STABILITY + "" + ChatColor.RED + ChatColor.UNDERLINE + "PROFILING for " + durationTicks / 20 + " seconds. EXPECT LAG!");
+				i.sendMessage(Final.TAG_STABILITY + "" + ChatColor.RED + ChatColor.UNDERLINE + "PROFILING for " + durationTicks / 20 + " seconds!");
 			}
 
 			st.getSampler().getActionHistory().act(player.getName() + " started stacktrace for " + durationTicks / 20 + "s");
@@ -257,7 +255,7 @@ public class StackTraceMonitor implements Listener
 	public void finishTrace()
 	{
 		tracingPlayer.sendMessage("Traced " + p.getTraced().size() + " plugin(s) in " + (p.getTicks() / 20) + "s");
-		p.sendBook(tracingPlayer, handler);
+		p.sendBook(tracingPlayer, new GUIHandler(st, tracingPlayer));
 
 		for(Player i : st.getServer().getOnlinePlayers())
 		{

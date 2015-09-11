@@ -1,8 +1,10 @@
 main: com.ulticraft.stability.Stability
 name: Stability
 start: POSTWORLD
-version: 1.6
+version: 1.6.1
 commands:
   stability:
     aliases: st
     description: Base Stability Command
+  monitor:
+    aliases: mon

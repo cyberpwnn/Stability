@@ -5,17 +5,23 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
+import com.ulticraft.gui.GUI;
+import com.ulticraft.gui.GUIElement;
+import com.ulticraft.gui.GUIHandler;
+import com.ulticraft.gui.GUITrigger;
 
 public class Sampler implements Listener
 {
@@ -326,9 +332,50 @@ public class Sampler implements Listener
 
 	public void sendHistory(CommandSender sender)
 	{
-		for(String i : history.export())
+		if(sender instanceof Player)
 		{
-			sender.sendMessage(i);
+			GUI gui = new GUI("History", history.export().size() + 9);
+		
+			for(int i = 0; i < history.export().size(); i++)
+			{
+				GUIElement e = new GUIElement(i, history.export().get(i), Material.NETHER_STAR, new GUITrigger()
+				{
+					@Override
+					public void run()
+					{
+						
+					}
+				});
+				if(e.getName().contains("CHUNK-PURGE"))
+				{
+					e.setMaterial(Material.GRASS);
+				}
+				
+				else if(e.getName().contains("MOB-CULL"))
+				{
+					e.setMaterial(Material.GOLD_SWORD);
+				}
+				
+				else if(e.getName().contains("GARBAGE-COL"))
+				{
+					e.setMaterial(Material.BLAZE_POWDER);
+				}
+				
+				gui.addGUIElement(e);
+			}
+			
+			GUIHandler g = new GUIHandler(pl, (Player) sender);
+			g.addGui(gui);
+			g.triggerGUI(gui);
+			g.delGui(gui);
+		}
+		
+		else
+		{
+			for(String i : history.export())
+			{
+				sender.sendMessage(i);
+			}
 		}
 	}
 
