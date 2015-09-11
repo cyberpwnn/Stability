@@ -140,7 +140,14 @@ public class StackTracePackage
 			
 			String f = m + k + " :: " + ChatColor.YELLOW + NumberFormat.getNumberInstance(Locale.US).format(traced.get(k));
 			
-			GUIElement e = new GUIElement(count-1, f, ma, null);
+			GUIElement e = new GUIElement(count-1, f, ma, new GUITrigger()
+			{
+				@Override
+				public void run()
+				{
+					
+				}
+			});
 			e.setSize(count);
 			gui.addGUIElement(e);
 		}
