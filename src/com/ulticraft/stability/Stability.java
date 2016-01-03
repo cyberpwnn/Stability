@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.logging.Logger;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
+import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -103,6 +104,48 @@ public class Stability extends JavaPlugin
 			else
 			{
 				sender.sendMessage("Monitoring is for in-game use only!");
+			}
+
+			return true;
+		}
+		
+		if(args[0].equalsIgnoreCase("chunklagtp") || args[0].equalsIgnoreCase("cltp"))
+		{
+			if(sender instanceof Player)
+			{
+				if(sender.hasPermission("stability.action"))
+				{
+					Chunk c = sampler.getAnalyzer().getActionController().getBadChunk();
+					
+					if(c == null)
+					{
+						sender.sendMessage("Cant seem to find a bad chunk...");
+					}
+					
+					else
+					{
+						if(((Player) sender).getGameMode().equals(GameMode.CREATIVE))
+						{
+							((Player) sender).teleport(c.getBlock(7, 7, 7).getLocation());
+							sender.sendMessage("After you fix this chunk, use /st cltp again :D");
+						}
+						
+						else
+						{
+							sender.sendMessage("Ensure your in creative, or you could drown in a chunk.");
+						}
+					}
+				}
+
+				else
+				{
+					sender.sendMessage(String.valueOf(Final.TAG_STABILITY) + ChatColor.RED + "You do not have permission to use cltp!");
+				}
+			}
+
+			else
+			{
+				sender.sendMessage("CLTP is for in-game use only!");
 			}
 
 			return true;

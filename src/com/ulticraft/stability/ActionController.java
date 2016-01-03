@@ -29,40 +29,26 @@ public class ActionController implements Listener
 		return pl.getServer().getWorlds();
 	}
 	
-	public void cacheDrops()
+	public Chunk getBadChunk()
 	{
+		int most = 0;
+		Chunk c = null;
+		
 		for(World i : pl.getServer().getWorlds())
 		{
 			for(Chunk j : i.getLoadedChunks())
 			{
-				for(Entity k : j.getEntities())
+				int k = j.getEntities().length;
+				
+				if(k > most)
 				{
-					if(k.getType().equals(EntityType.DROPPED_ITEM))
-					{
-						boolean cachable = true;
-						
-						for(Entity l : k.getNearbyEntities(32, 32, 32))
-						{
-							if(l.getType().equals(EntityType.PLAYER))
-							{
-								cachable = false;
-								break;
-							}
-						}
-						
-						if(cachable)
-						{
-							
-						}
-					}
+					most = k;
+					c = j;
 				}
 			}
 		}
-	}
-	
-	public void respawnDrops()
-	{
 		
+		return c;
 	}
 	
 	public void syncPurge()
