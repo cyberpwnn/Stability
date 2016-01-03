@@ -16,9 +16,14 @@ An important part of making stability work for your server, is the configuration
 Commands and permissions are located on the wiki also!
 
 # Downloads
-[RELEASE v1.6.1](https://github.com/danielmills/Stability/blob/master/build/latest/release/Stability.jar?raw=true)
+[RELEASE v1.6.1.1](https://github.com/danielmills/Stability/blob/master/build/latest/release/Stability.jar?raw=true)
 
 ## Changelog
+
+### Stability 1.6.1.1
+Stability 1.6.1.1 Adds another command, chunklagtp (/st cltp)
+* Small bugfixees
+* Add command to tp admin to chunk with most entities in it (/st cltp)
 
 ### Stability 1.6.1
 Stability 1.6.1 Makes use of its GUI api more often, and works on display of dispatching info.
