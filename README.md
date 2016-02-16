@@ -16,9 +16,21 @@ An important part of making stability work for your server, is the configuration
 Commands and permissions are located on the wiki also!
 
 # Downloads
-[RELEASE v1.6.1.1](https://github.com/danielmills/Stability/blob/master/build/latest/release/Stability.jar?raw=true)
+[RELEASE v1.7](https://github.com/danielmills/Stability/blob/master/build/latest/release/Stability.jar?raw=true)
 
 ## Changelog
+
+### Stability 1.7
+Stability 1.7 Revamps the map, increases performance up another notch, and adds MAHS (memory stuff)
+* Chunk Bugfixes (judgement when to act upon chunks or not)
+* Memory Allocations Per Second in megabytes comparing Seconds per garbage collection
+* Overhaul to the dispatcher, and basically more optimizations among adding the new sample
+* MAHS now averages based on the ammount of garbage collections. More activity, more accurate; less, smoother.
+* Small TPS measurement change. This will make the tps spike back up faster, less averaging.
+* Fixed a potential small memory leak in the sampler.
+* Performance optimizations for the Stack Trace measurment.
+* Action Tasker now defers purging chunks unless needed. (less purging for no reason)
+* Better judgement on if the server is lagging or not. (notification of lag will be faster)
 
 ### Stability 1.6.1.1
 Stability 1.6.1.1 Adds another command, chunklagtp (/st cltp)
