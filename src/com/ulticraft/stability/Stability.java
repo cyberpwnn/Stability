@@ -9,6 +9,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import com.ulticraft.core.MAPS;
 
 public class Stability extends JavaPlugin
 {
@@ -31,6 +32,7 @@ public class Stability extends JavaPlugin
 		this.log("Enabling Stability by cyberpwn");
 		this.sampler.start();
 		this.verbose("Invoked Start for Sampler");
+		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new MAPS(), 0, 20);
 	}
 
 	public void onDisable()
