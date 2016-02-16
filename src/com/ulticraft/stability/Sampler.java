@@ -18,6 +18,7 @@ import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
+import com.ulticraft.core.MAPS;
 import com.ulticraft.gui.GUI;
 import com.ulticraft.gui.GUIElement;
 import com.ulticraft.gui.GUIHandler;
@@ -210,6 +211,7 @@ public class Sampler implements Listener
 		tavgchkdbl += sampleData.getChunksLoaded();
 		tavgplr += sampleData.getPlayersOnline();
 		tavgram += sampleData.getFreeMemory();
+		currentSample = sampleData;
 
 		if(getAnalyzer().getLag() > 0)
 		{
@@ -284,7 +286,7 @@ public class Sampler implements Listener
 					rms /= sampleArray.getSamples().size();
 				}
 
-				sample(new Sample(TPSSample.getTPS(pl.getConfiguration().getTpsSoftness()), freeMemory, maxMemory, chunksLoaded, playersOnline, totalEntities, livingEntities, dropEntities, generations, (rms + redstones) / 2, upTime));
+				sample(new Sample((int)MAPS.getMAPS(), (int)MAPS.getGCOH(), TPSSample.getTPS(pl.getConfiguration().getTpsSoftness()), freeMemory, maxMemory, chunksLoaded, playersOnline, totalEntities, livingEntities, dropEntities, generations, (rms + redstones) / 2, upTime));
 
 				if(clockSecond == 2)
 				{
@@ -292,7 +294,7 @@ public class Sampler implements Listener
 					redstones = 0;
 				}
 
-				if(mapSample > 40)
+				if(mapSample > 10)
 				{
 					mapSample = 0;
 
