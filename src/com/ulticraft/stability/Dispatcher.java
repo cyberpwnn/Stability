@@ -22,6 +22,8 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import com.ulticraft.core.Cooldown;
+import com.ulticraft.core.Format;
+import com.ulticraft.core.MAPS;
 
 public class Dispatcher implements Listener
 {
@@ -201,7 +203,7 @@ public class Dispatcher implements Listener
 
 			if(!cooldown.hasCooldown(i))
 			{
-				i.playSound(i.getLocation(), Sound.CHICKEN_EGG_POP, 0.5f, 1.5f);
+				i.playSound(i.getLocation(), Sound.EXPLODE, 0.5f, 1.5f);
 				i.sendMessage(Final.TAG_STABILITY + ChatColor.RED + "Detected Lag, consider using /st mon");
 				cooldown.activate(i);
 			}
@@ -229,9 +231,10 @@ public class Dispatcher implements Listener
 
 	public void disbatchMonitorInformation(final Sample sampleData, String action, SampleArray array)
 	{
-		int gen = sampleData.getGenerations();
+		long gen = MAPS.getMAPS();
+		int gcoh = MAPS.getGCOH();
 		String tpsm = new StringBuilder().append(new DecimalFormat("#.#").format(sampleData.getTps())).toString();
-		String memm = " " + NumberFormat.getNumberInstance(Locale.US).format(Double.valueOf(new DecimalFormat("#").format(sampleData.getFreeMemory() / 1024.0 / 1024.0)));
+		String memm = Format.memoryFormat((int) (sampleData.getFreeMemory() / 1024.0 / 1024.0));
 		if(sampleData.getTps() == -20.0)
 		{
 			double percent = ((((double) pl.getConfiguration().getTpsSoftness() - TPSSample.getRemaining()) / (double) pl.getConfiguration().getTpsSoftness()) * 100);
@@ -260,9 +263,9 @@ public class Dispatcher implements Listener
 			memm = ChatColor.GOLD + memm + ChatColor.RESET;
 		}
 
-		String gens = NumberFormat.getNumberInstance(Locale.US).format(gen);
+		String gens = gen + "/" + gcoh;
 
-		if(gen > pl.getConfiguration().getMaxChunkOverload())
+		if(gen > 128)
 		{
 			gens = ChatColor.LIGHT_PURPLE + "" + ChatColor.UNDERLINE + gens + ChatColor.RESET;
 		}
