@@ -5,6 +5,7 @@ import org.bukkit.map.MapCanvas;
 import org.bukkit.map.MapPalette;
 import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
+import com.ulticraft.core.MAPS;
 
 @SuppressWarnings("deprecation")
 public class MapGraph extends MapRenderer
@@ -37,18 +38,35 @@ public class MapGraph extends MapRenderer
 		int factorRam = (int) Math.round(array.getSamples().get(0).getMaxMemory() / 128);
 		int workingLine = 0;
 		int prevRamLevel = 0;
+		int mxm = 127;
+		int mim = 0;
+		
+		for(Sample i : array.getSamples())
+		{
+			int rml = (int) Math.round((i.getMaxMemory() - i.getFreeMemory()) / factorRam);
+			
+			if(rml < mxm)
+			{
+				mxm = rml;
+			}
+			
+			if(rml > mim)
+			{
+				mim = rml;
+			}
+		}
 
 		int factorTps = 200 / 128;
 		int prevTpsLevel = 0;
 
-		int factorChunks = (int) Math.round(array.getSamples().get(0).getFreeMemory() / 20000 / 128);
+		int factorChunks = (int) Math.round(MAPS.getMAPS() / 128) + 1;
 		int prevChunksLevel = 0;
 
 		for(Sample i : array.getSamples())
 		{
 			int ramLevel = (int) Math.round((i.getMaxMemory() - i.getFreeMemory()) / factorRam);
 			int tpsLevel = 72 - (int) Math.round(Math.abs(i.getTps() * 10) / factorTps) + 128;
-			int chunksLevel = 127 - (int) Math.round(i.getChunksLoaded() / factorChunks);
+			int chunksLevel = 127 - (int) Math.round(i.getMos() / factorChunks);
 
 			if(prevRamLevel == 0)
 			{
@@ -64,6 +82,9 @@ public class MapGraph extends MapRenderer
 			{
 				prevChunksLevel = chunksLevel;
 			}
+			
+			canvas.setPixel(workingLine, mxm, MapPalette.DARK_BROWN);
+			canvas.setPixel(workingLine, mim, MapPalette.DARK_BROWN);
 
 			if(prevRamLevel < ramLevel)
 			{
