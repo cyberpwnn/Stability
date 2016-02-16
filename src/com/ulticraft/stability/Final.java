@@ -38,7 +38,7 @@ public class Final
 	public static final String ALG_SUP_DROP_ADAPTIVE_QUICKUP = "suppression.drops.adaptive.quick-pickup";
 	public static final String ALG_SUP_DROP_ADAPTIVE_CACHE_DROPS = "suppression.drops.adaptive.cache-distant-drops";
 	public static final String ALG_RESPRED_ = "";
-	public static final String PLUGIN_VERSION = "1.6.1";
+	public static final String PLUGIN_VERSION = "1.7";
 	public static final String PERM_MONITOR = "stability.monitor";
 	public static final String PERM_ACTION = "stability.action";
 	public static final String PERM_RELOAD = "stability.reload";
