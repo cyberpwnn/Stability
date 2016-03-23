@@ -203,7 +203,7 @@ public class Dispatcher implements Listener
 
 			if(!cooldown.hasCooldown(i))
 			{
-				i.playSound(i.getLocation(), Sound.EXPLODE, 0.5f, 1.5f);
+				i.playSound(i.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 0.5f, 1.5f);
 				i.sendMessage(Final.TAG_STABILITY + ChatColor.RED + "Detected Lag, consider using /st mon");
 				cooldown.activate(i);
 			}
@@ -299,7 +299,6 @@ public class Dispatcher implements Listener
 			else
 			{
 				t.sendTitleAsSubtitle(i);
-				t.sendAsAction(i);
 			}
 			
 			this.monitoringMinimalistTime.put(i, this.monitoringMinimalistTime.get(i) + 1);
@@ -309,7 +308,7 @@ public class Dispatcher implements Listener
 				if(this.monitoringMinimalistTime.get(i) < (pl.getConfiguration().getDispatchTick()) + ((20 / pl.getConfiguration().getDispatchTick()) * 5))
 				{
 					this.monitoringMinimalist.put(i, true);
-					new Title(" ", ChatColor.BLACK + "" + ChatColor.MAGIC + ChatColor.stripColor(String.valueOf(tpsm) + " " + memm + " " + ChatColor.BLACK + NumberFormat.getNumberInstance(Locale.US).format(sampleData.getChunksLoaded()) + " " + gens + " " + ChatColor.BLACK + NumberFormat.getNumberInstance(Locale.US).format(sampleData.getLivingEntities()) + " " + ChatColor.BLACK + NumberFormat.getNumberInstance(Locale.US).format(sampleData.getDropEntities()) + " " + reds)).sendAsAction(i);
+					new Title(" ", " ", ChatColor.BLACK + "" + ChatColor.MAGIC + ChatColor.stripColor(String.valueOf(tpsm) + " " + memm + " " + ChatColor.BLACK + NumberFormat.getNumberInstance(Locale.US).format(sampleData.getChunksLoaded()) + " " + gens + " " + ChatColor.BLACK + NumberFormat.getNumberInstance(Locale.US).format(sampleData.getLivingEntities()) + " " + ChatColor.BLACK + NumberFormat.getNumberInstance(Locale.US).format(sampleData.getDropEntities()) + " " + reds)).send(i);
 				}
 			}
 		}

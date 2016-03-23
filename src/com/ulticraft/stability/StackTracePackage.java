@@ -157,7 +157,7 @@ public class StackTracePackage
 			@Override
 			public void run()
 			{
-				getPlayer().playSound(getPlayer().getLocation(), Sound.BAT_TAKEOFF, 1.0f, 2.0f);
+				getPlayer().playSound(getPlayer().getLocation(), Sound.ENTITY_BAT_TAKEOFF, 1.0f, 2.0f);
 				close();
 			}
 		}));

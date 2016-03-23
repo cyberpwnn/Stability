@@ -236,11 +236,9 @@ public class StackTraceMonitor implements Listener
 				pr = ChatColor.LIGHT_PURPLE + "No Plugins Caught!";
 			}
 
-			Title titlef = new Title("", pr);
-			Title title = new Title(ChatColor.DARK_PURPLE + "Caught " + got, ChatColor.RED + "Remaining: " + getTraceTimeRemaining() / 20 + "s", 0, 20, 0);
+			Title title = new Title(ChatColor.DARK_PURPLE + "Caught " + got, ChatColor.RED + "Remaining: " + getTraceTimeRemaining() / 20 + "s", pr, 0, 20, 0);
 			title.send(tracingPlayer);
-			titlef.sendAsAction(tracingPlayer);
-
+			
 			traceLeft--;
 
 			if(traceLeft == 0)
