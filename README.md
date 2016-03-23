@@ -16,7 +16,8 @@ An important part of making stability work for your server, is the configuration
 Commands and permissions are located on the wiki also!
 
 # Downloads
-[RELEASE v1.7](https://github.com/danielmills/Stability/blob/master/build/latest/release/Stability.jar?raw=true)
+[RELEASE v1.7 for Minecraft 1.9](https://github.com/danielmills/Stability/blob/master/build/latest/release/Stability-1.9.jar?raw=true)
+[RELEASE v1.7 for Minecraft 1.8](https://github.com/danielmills/Stability/blob/master/build/latest/release/Stability-1.8.jar?raw=true)
 
 ## Changelog
 
